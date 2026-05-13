@@ -1,1 +1,174 @@
-<p>home-usuario-component works!</p>
+<div class="home-page">
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <a class="brand" href="#" aria-label="SAT-MED inicio">
+        <span class="brand__mark">+</span>
+        <span class="brand__text">SAT-MED</span>
+      </a>
+
+      <nav class="nav" aria-label="Navegación principal">
+        <a href="#especialidades">Especialidades</a>
+        <a href="#horarios">Horarios</a>
+        <a href="#ayuda">Ayuda y Contacto</a>
+      </nav>
+
+      <a class="btn btn--primary btn--sm" href="#acceso">Acceder</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <span class="badge">INNOVACIÓN EN SALUD</span>
+
+          <h1>Evolución digital en salud</h1>
+
+          <p>
+            Transformando la atención médica a través de la innovación digital.
+            Una plataforma integrada diseñada para la máxima precisión clínica
+            y comodidad del paciente.
+          </p>
+
+          <div class="hero__actions">
+            <a class="btn btn--accent" href="#registro">Registrarse como Paciente</a>
+            <a class="btn btn--outline" href="#login">Iniciar Sesión</a>
+          </div>
+        </div>
+
+        <div class="hero__visual">
+          <div class="device-card">
+            <img src="/img/home/sat-med-hero.png" alt="SAT-MED Hero">
+
+            <div class="floating-card">
+              <span class="floating-card__icon">🛡️</span>
+              <span>Sistema Certificado de Alta Precisión</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="cards-section">
+      <div class="container cards-grid">
+
+        <article id="especialidades" class="info-card">
+            <div class="info-card__header">
+                <h2>Especialidades</h2>
+                <span class="info-card__icon">🩺</span>
+            </div>
+
+            @if (especialidades$ | async; as especialidades) {
+                <ul class="specialty-list">
+                @for (especialidad of especialidades; track especialidad.idEspecialidad) {
+                    <li>
+                    <img
+                        class="list-image"
+                        [src]="obtenerImagenEspecialidad(especialidad.idEspecialidad)"
+                        [alt]="especialidad.nombreEspecialidad"
+                    />
+                    <span>{{ especialidad.nombreEspecialidad }}</span>
+                    </li>
+                } @empty {
+                    <li class="empty-state">No hay especialidades disponibles.</li>
+                }
+                </ul>
+            } @else {
+                <p class="loading-state">Cargando especialidades...</p>
+            }
+
+            <p class="card-footnote">Conectando con nuestra red de especialistas...</p>
+        </article>
+
+
+        
+
+
+        <article id="horarios" class="info-card">
+          <div class="info-card__header">
+            <h2>Horarios</h2>
+            <span class="info-card__icon">🕒</span>
+          </div>
+
+          <div class="clinic-info">
+            <strong>Clínica en Coquimbo</strong>
+            <p>Av. Costanera 1450, Piso 3</p>
+          </div>
+
+          <table class="schedule-table" aria-label="Horarios de atención">
+            <tbody>
+              <tr>
+                <td>Lunes - Viernes</td>
+                <td>08:00 - 20:00</td>
+              </tr>
+              <tr>
+                <td>Sábado</td>
+                <td>09:00 - 14:00</td>
+              </tr>
+              <tr>
+                <td>Domingo</td>
+                <td class="closed">Cerrado</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <a class="btn btn--schedule" href="#disponibilidad">Ver Disponibilidad</a>
+        </article>
+
+        <article id="ayuda" class="info-card">
+          <div class="info-card__header">
+            <h2>Ayuda y Contacto</h2>
+            <span class="info-card__icon">?</span>
+          </div>
+
+          <div class="help-list">
+            <a class="help-item" href="#centro-ayuda">
+              <span class="help-item__icon">📘</span>
+              <span>
+                <strong>Centro de Ayuda</strong>
+                <small>Preguntas frecuentes</small>
+              </span>
+            </a>
+
+            <a class="help-item" href="#soporte">
+              <span class="help-item__icon">🎧</span>
+              <span>
+                <strong>Soporte 24/7</strong>
+                <small>Chat con especialista</small>
+              </span>
+            </a>
+
+            <a class="help-item" href="mailto:contacto@sat-med.com">
+              <span class="help-item__icon">✉</span>
+              <span>
+                <strong>Email</strong>
+                <small>contacto@sat-med.com</small>
+              </span>
+            </a>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__left">
+        <strong>SAT-MED</strong>
+        <p>© 2026 SAT-MED. Todos los derechos reservados.</p>
+      </div>
+
+      <div class="footer__center">
+        <a href="#privacidad">Privacidad</a>
+        <a href="#terminos">Términos de Uso</a>
+        <a href="#contacto">Contacto</a>
+      </div>
+
+      <div class="footer__right" aria-label="Redes sociales">
+        <a href="#" aria-label="Facebook">🌐</a>
+        <a href="#" aria-label="Instagram">◎</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+  </footer>
+</div>
