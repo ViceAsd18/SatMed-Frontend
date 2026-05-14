@@ -1,0 +1,123 @@
+<div class="pagina-profesionales">
+  <div class="contenedor">
+    <header class="cabecera">
+      <h1>Gestión de profesionales</h1>
+      <p class="cabecera__subtitulo">CRUD de profesionales — SAT-MED</p>
+    </header>
+
+    @if (mensajeError(); as error) {
+      <p class="alerta alerta--error" role="alert">{{ error }}</p>
+    }
+
+    <section class="tarjeta tarjeta--formulario" aria-labelledby="titulo-formulario">
+      <h2 id="titulo-formulario" class="tarjeta__titulo">{{ tituloFormulario() }}</h2>
+
+      <form [formGroup]="formularioProfesional" (ngSubmit)="enviarFormulario()" class="formulario">
+        <div class="formulario__rejilla">
+          <label class="campo">
+            <span class="campo__etiqueta">Id profesional</span>
+            <input class="campo__input" type="number" min="0" formControlName="idProfesional" />
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Número de registro</span>
+            <input class="campo__input" type="text" formControlName="numeroRegistroProfesional" />
+            @if (
+              formularioProfesional.get('numeroRegistroProfesional')?.touched &&
+              formularioProfesional.get('numeroRegistroProfesional')?.invalid
+            ) {
+              <span class="campo__error">Registro obligatorio (máx. 80 caracteres).</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id usuario</span>
+            <input class="campo__input" type="number" min="1" formControlName="idUsuario" />
+            @if (formularioProfesional.get('idUsuario')?.touched && formularioProfesional.get('idUsuario')?.invalid) {
+              <span class="campo__error">Id de usuario obligatorio (≥ 1).</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id especialidad</span>
+            <input class="campo__input" type="number" min="1" formControlName="idEspecialidad" />
+            @if (
+              formularioProfesional.get('idEspecialidad')?.touched &&
+              formularioProfesional.get('idEspecialidad')?.invalid
+            ) {
+              <span class="campo__error">Id de especialidad obligatorio (≥ 1).</span>
+            }
+          </label>
+        </div>
+
+        <div class="formulario__acciones">
+          <button class="btn btn--primario" type="submit" [disabled]="guardando()">
+            {{ idProfesionalEnEdicion() === null ? 'Crear' : 'Actualizar' }}
+          </button>
+          <button
+            class="btn btn--secundario"
+            type="button"
+            (click)="prepararFormularioNuevo()"
+            [disabled]="guardando()"
+          >
+            Limpiar / Nuevo
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="tarjeta" aria-labelledby="titulo-lista">
+      <h2 id="titulo-lista" class="tarjeta__titulo">Listado</h2>
+
+      @if (cargando()) {
+        <p class="estado estado--carga">Cargando profesionales...</p>
+      } @else {
+        <div class="tabla-envoltorio">
+          <table class="tabla-profesionales">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Número de registro</th>
+                <th>Id usuario</th>
+                <th>Id especialidad</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (profesional of listaProfesionales(); track profesional.idProfesional) {
+                <tr>
+                  <td>{{ profesional.idProfesional }}</td>
+                  <td>{{ profesional.numeroRegistroProfesional }}</td>
+                  <td>{{ profesional.idUsuario }}</td>
+                  <td>{{ profesional.idEspecialidad }}</td>
+                  <td class="tabla-profesionales__acciones">
+                    <button
+                      type="button"
+                      class="btn btn--enlace"
+                      (click)="editarProfesional(profesional)"
+                      [disabled]="guardando()"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn--peligro"
+                      (click)="eliminarProfesional(profesional)"
+                      [disabled]="guardando()"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="5" class="estado estado--vacio">No hay profesionales registrados.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </div>
+</div>

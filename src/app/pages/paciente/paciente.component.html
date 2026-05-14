@@ -1,0 +1,180 @@
+<div class="pagina-pacientes">
+  <div class="contenedor">
+    <header class="cabecera">
+      <h1>Gestión de pacientes</h1>
+      <p class="cabecera__subtitulo">CRUD de pacientes — SAT-MED</p>
+    </header>
+
+    @if (mensajeError(); as error) {
+      <p class="alerta alerta--error" role="alert">{{ error }}</p>
+    }
+
+    <section class="tarjeta tarjeta--formulario" aria-labelledby="titulo-formulario">
+      <h2 id="titulo-formulario" class="tarjeta__titulo">{{ tituloFormulario() }}</h2>
+
+      <form [formGroup]="formularioPaciente" (ngSubmit)="enviarFormulario()" class="formulario">
+        <div class="formulario__rejilla">
+          <label class="campo">
+            <span class="campo__etiqueta">RUT</span>
+            <input class="campo__input" type="text" formControlName="rutUsuario" placeholder="12345678-9" />
+            @if (formularioPaciente.get('rutUsuario')?.touched && formularioPaciente.get('rutUsuario')?.invalid) {
+              <span class="campo__error">RUT obligatorio con formato 12345678-9.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Primer nombre</span>
+            <input class="campo__input" type="text" formControlName="pnombreUsuario" />
+            @if (formularioPaciente.get('pnombreUsuario')?.touched && formularioPaciente.get('pnombreUsuario')?.invalid) {
+              <span class="campo__error">Campo obligatorio.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Segundo nombre</span>
+            <input class="campo__input" type="text" formControlName="snombreUsuario" />
+            @if (formularioPaciente.get('snombreUsuario')?.touched && formularioPaciente.get('snombreUsuario')?.invalid) {
+              <span class="campo__error">Campo obligatorio.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Apellido paterno</span>
+            <input class="campo__input" type="text" formControlName="apaternoUsuario" />
+            @if (formularioPaciente.get('apaternoUsuario')?.touched && formularioPaciente.get('apaternoUsuario')?.invalid) {
+              <span class="campo__error">Campo obligatorio.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Apellido materno</span>
+            <input class="campo__input" type="text" formControlName="amaternoUsuario" />
+            @if (formularioPaciente.get('amaternoUsuario')?.touched && formularioPaciente.get('amaternoUsuario')?.invalid) {
+              <span class="campo__error">Campo obligatorio.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Correo electrónico</span>
+            <input class="campo__input" type="email" formControlName="emailUsuario" />
+            @if (formularioPaciente.get('emailUsuario')?.touched && formularioPaciente.get('emailUsuario')?.invalid) {
+              <span class="campo__error">Correo válido obligatorio.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Teléfono</span>
+            <input class="campo__input" type="text" formControlName="telefonoUsuario" />
+            @if (formularioPaciente.get('telefonoUsuario')?.touched && formularioPaciente.get('telefonoUsuario')?.invalid) {
+              <span class="campo__error">Teléfono obligatorio (8 a 20 caracteres).</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Fecha de nacimiento</span>
+            <input class="campo__input" type="date" formControlName="fechaNacimientoUsuario" />
+            @if (formularioPaciente.get('fechaNacimientoUsuario')?.touched && formularioPaciente.get('fechaNacimientoUsuario')?.invalid) {
+              <span class="campo__error">Fecha obligatoria.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Contraseña</span>
+            <input class="campo__input" type="password" formControlName="contrasenaUsuario" autocomplete="new-password" />
+            @if (formularioPaciente.get('contrasenaUsuario')?.touched && formularioPaciente.get('contrasenaUsuario')?.invalid) {
+              <span class="campo__error">Mínimo 6 caracteres.</span>
+            }
+          </label>
+
+          <label class="campo campo--checkbox">
+            <input type="checkbox" formControlName="activo" />
+            <span class="campo__etiqueta">Activo</span>
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Fecha de creación</span>
+            <input class="campo__input" type="date" formControlName="fechaCreacionUsuario" />
+            @if (formularioPaciente.get('fechaCreacionUsuario')?.touched && formularioPaciente.get('fechaCreacionUsuario')?.invalid) {
+              <span class="campo__error">Fecha obligatoria.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id género</span>
+            <input class="campo__input" type="number" min="1" formControlName="idGenero" />
+            @if (formularioPaciente.get('idGenero')?.touched && formularioPaciente.get('idGenero')?.invalid) {
+              <span class="campo__error">Id numérico mayor o igual a 1.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id dirección</span>
+            <input class="campo__input" type="number" min="1" formControlName="idDireccion" />
+            @if (formularioPaciente.get('idDireccion')?.touched && formularioPaciente.get('idDireccion')?.invalid) {
+              <span class="campo__error">Id numérico mayor o igual a 1.</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id rol (paciente por defecto: 3)</span>
+            <input class="campo__input" type="number" min="1" formControlName="idRol" />
+            @if (formularioPaciente.get('idRol')?.touched && formularioPaciente.get('idRol')?.invalid) {
+              <span class="campo__error">Id de rol obligatorio.</span>
+            }
+          </label>
+        </div>
+
+        <div class="formulario__acciones">
+          <button class="btn btn--primario" type="submit" [disabled]="guardando()">
+            {{ idUsuarioEnEdicion() === null ? 'Crear' : 'Actualizar' }}
+          </button>
+          <button class="btn btn--secundario" type="button" (click)="prepararFormularioNuevo()" [disabled]="guardando()">
+            Limpiar / Nuevo
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="tarjeta" aria-labelledby="titulo-lista">
+      <h2 id="titulo-lista" class="tarjeta__titulo">Listado</h2>
+
+      @if (cargando()) {
+        <p class="estado estado--carga">Cargando pacientes...</p>
+      } @else {
+        <div class="tabla-envoltorio">
+          <table class="tabla-pacientes">
+            <thead>
+              <tr>
+                <th>RUT</th>
+                <th>Nombre completo</th>
+                <th>Email</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (paciente of pacientes(); track paciente.idUsuario) {
+                <tr>
+                  <td>{{ paciente.rutUsuario }}</td>
+                  <td>{{ obtenerNombreCompleto(paciente) }}</td>
+                  <td>{{ paciente.emailUsuario }}</td>
+                  <td class="tabla-pacientes__acciones">
+                    <button type="button" class="btn btn--enlace" (click)="editarPaciente(paciente)" [disabled]="guardando()">
+                      Editar
+                    </button>
+                    <button type="button" class="btn btn--peligro" (click)="eliminarPaciente(paciente)" [disabled]="guardando()">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="estado estado--vacio">No hay pacientes registrados.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </div>
+</div>
