@@ -1,0 +1,83 @@
+<div class="admin-container" ngSkipHydration>
+  <aside class="sidebar">
+    <div class="logo">
+      <h2>SAT-MED Admin</h2>
+    </div>
+    <nav class="nav-menu">
+      <a href="#" class="active">📊 Dashboard</a>
+      <a href="#">👨‍⚕️ Gestionar Profesionales</a>
+      <a href="#">👥 Gestionar Pacientes</a>
+      <a href="#">🏥 Sucursal Coquimbo</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="btn-logout">Cerrar Sesión</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="main-header">
+      <h1>Panel de Administración</h1>
+      <p>Bienvenido al sistema de gestión de la Clínica SAT-MED</p>
+    </header>
+
+    <section class="stats-cards">
+      <div class="card">
+        <div class="card-info">
+          <h3>Profesionales</h3>
+          <p class="number">3</p>
+          <span class="card-detail">Médicos Activos</span>
+        </div>
+        <div class="card-icon">👨‍⚕️</div>
+      </div>
+      <div class="card">
+        <div class="card-info">
+          <h3>Pacientes</h3>
+          <p class="number">148</p>
+          <span class="card-detail">Registrados en el sistema</span>
+        </div>
+        <div class="card-icon">👥</div>
+      </div>
+      <div class="card">
+        <div class="card-info">
+          <h3>Citas de Hoy</h3>
+          <p class="number">35</p>
+          <span class="card-detail">Agendadas en Coquimbo</span>
+        </div>
+        <div class="card-icon">📅</div>
+      </div>
+    </section>
+
+    <section class="table-section">
+      <div class="table-header">
+        <h2>Listado de Personal Médico</h2>
+        <button class="btn-add">+ Registrar Nuevo Profesional</button>
+      </div>
+      
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID Profesional</th>
+            <th>N° Registro Médico</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let medico of listaProfesionales">
+            <td>{{ medico.id_profesional }}</td>
+            <td>{{ medico.numero_registro_profesional }}</td>
+            <td>
+              <span class="status" [ngClass]="medico.activo_profesional === 1 ? 'active' : 'inactive'">
+                {{ medico.activo_profesional === 1 ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-edit">Editar</button>
+              <button class="btn-delete">Eliminar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+</div>
