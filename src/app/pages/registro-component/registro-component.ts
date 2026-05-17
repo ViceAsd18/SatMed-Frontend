@@ -8,12 +8,14 @@ import {
   ValidatorFn,
   Validators
 } from '@angular/forms';
+
 import { RegionService } from '../../services/RegionService/region-service';
 import { ComunaService } from '../../services/ComunaService/comuna-service';
 import { Region } from '../../models/Region';
 import { Comuna } from '../../models/Comuna';
 import { Genero } from '../../models/Genero';
 import { GeneroService } from '../../services/GeneroService/genero-service';
+import { UsuarioService } from '../../services/UsuarioService/usuario-service';
 
 @Component({
   selector: 'app-registro-component',
@@ -27,6 +29,7 @@ export class RegistroComponent implements OnInit {
   private readonly regionService = inject(RegionService);
   private readonly comunaService = inject(ComunaService);
   private readonly generoService = inject(GeneroService);
+  private readonly usuarioService = inject(UsuarioService);
 
   regiones: Region[] = [];
   comunas: Comuna[] = [];
@@ -56,7 +59,7 @@ export class RegistroComponent implements OnInit {
       calleUsuario: ['', [Validators.required, Validators.minLength(3)]],
       numeroUsuario: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       regionUsuario: ['', [Validators.required]],
-      comunaUsuario: ['', [Validators.required, Validators.minLength(2)]],
+      comunaUsuario: ['', [Validators.required]],
       idGenero: ['', [Validators.required]],
       contrasenaUsuario: ['', [Validators.required, Validators.minLength(8)]],
       confirmarContrasenaUsuario: ['', [Validators.required]],
@@ -73,7 +76,6 @@ export class RegistroComponent implements OnInit {
 
   cargarRegiones(): void {
     this.cargandoRegiones = true;
-
     this.regionService.obtenerRegiones().subscribe({
       next: (data) => {
         this.regiones = data;
@@ -88,7 +90,6 @@ export class RegistroComponent implements OnInit {
 
   cargarGeneros(): void {
     this.cargandoGeneros = true;
-
     this.generoService.obtenerGeneros().subscribe({
       next: (data) => {
         this.generos = data;
@@ -105,7 +106,6 @@ export class RegistroComponent implements OnInit {
     this.registroForm.get('regionUsuario')?.valueChanges.subscribe((idRegion) => {
       this.registroForm.get('comunaUsuario')?.setValue('');
       this.comunas = [];
-
       if (idRegion) {
         this.cargarComunas(Number(idRegion));
       }
@@ -114,7 +114,6 @@ export class RegistroComponent implements OnInit {
 
   cargarComunas(idRegion: number): void {
     this.cargandoComunas = true;
-
     this.comunaService.obtenerComunasPorRegion(idRegion).subscribe({
       next: (data) => {
         this.comunas = data;
@@ -149,14 +148,64 @@ export class RegistroComponent implements OnInit {
 
     if (this.registroForm.invalid) return;
 
+    const comunaValue = this.registroForm.get('comunaUsuario')?.value;
+
+    const regionValue = this.registroForm.get('regionUsuario')?.value;
+    const generoValue = this.registroForm.get('idGenero')?.value;
+    const numeroValue = this.registroForm.get('numeroUsuario')?.value;
+
+    const idComuna = Number(comunaValue);
+
+
+    if (!comunaValue || Number.isNaN(idComuna)) {
+      console.error('Comuna inválida:', comunaValue);
+      return;
+    }
+
+    const idRegion = Number(regionValue);
+    const idGenero = Number(generoValue);
+    const numeroDireccion = Number(numeroValue);
+
+    if (Number.isNaN(idComuna)) {
+      console.error('Comuna inválida:', comunaValue);
+      return;
+    }
+
+    if (Number.isNaN(idGenero) || Number.isNaN(idRegion) || Number.isNaN(numeroDireccion)) {
+      console.error('Datos numéricos inválidos');
+      return;
+    }
+
     this.loading = true;
-    setTimeout(() => {
-      this.loading = false;
-      console.log({
-        ...this.registroForm.getRawValue(),
-        fechaNacimientoUsuario: this.fechaNacimientoUsuario
-      });
-    }, 1200);
+
+    const payload = {
+      rutUsuario: this.registroForm.get('rutUsuario')?.value,
+      pnombreUsuario: this.registroForm.get('pnombreUsuario')?.value,
+      snombreUsuario: this.registroForm.get('snombreUsuario')?.value,
+      apaternoUsuario: this.registroForm.get('apaternoUsuario')?.value,
+      amaternoUsuario: this.registroForm.get('amaternoUsuario')?.value,
+      emailUsuario: this.registroForm.get('emailUsuario')?.value,
+      telefonoUsuario: this.registroForm.get('telefonoUsuario')?.value,
+      fechaNacimientoUsuario: this.fechaNacimientoUsuario,
+      contrasenaUsuario: this.registroForm.get('contrasenaUsuario')?.value,
+      activo: true,
+      idGenero,
+      idRol: 3,
+      calleDireccion: this.registroForm.get('calleUsuario')?.value,
+      numeroDireccion,
+      idComuna
+    };
+
+    this.usuarioService.registrarUsuario(payload).subscribe({
+      next: (resp) => {
+        this.loading = false;
+        console.log('Usuario registrado', resp);
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('Error al registrar usuario', err);
+      }
+    });
   }
 
   isInvalid(controlName: string): boolean {
@@ -191,7 +240,7 @@ export class RegistroComponent implements OnInit {
     const dia = String(this.registroForm.get('diaNacimientoUsuario')?.value ?? '').padStart(2, '0');
     const mes = String(this.registroForm.get('mesNacimientoUsuario')?.value ?? '');
     const anio = String(this.registroForm.get('anioNacimientoUsuario')?.value ?? '');
-    return dia && mes && anio ? `${dia}-${mes}-${anio}` : '';
+    return dia && mes && anio ? `${anio}-${mes}-${dia}` : '';
   }
 
   private validateCurrentStep(): boolean {
