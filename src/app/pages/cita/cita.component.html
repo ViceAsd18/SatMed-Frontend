@@ -1,0 +1,164 @@
+<div class="pagina-citas">
+  <div class="contenedor">
+    <header class="cabecera">
+      <h1>Gestión de citas</h1>
+      <p class="cabecera__subtitulo">CRUD de citas médicas — SAT-MED</p>
+    </header>
+
+    @if (mensajeError(); as error) {
+      <p class="alerta alerta--error" role="alert">{{ error }}</p>
+    }
+
+    <section class="tarjeta tarjeta--formulario" aria-labelledby="titulo-formulario">
+      <h2 id="titulo-formulario" class="tarjeta__titulo">{{ tituloFormulario() }}</h2>
+
+      <form [formGroup]="formularioCita" (ngSubmit)="enviarFormulario()" class="formulario">
+        <div class="formulario__rejilla">
+          <label class="campo">
+            <span class="campo__etiqueta">Fecha y hora</span>
+            <input class="campo__input" type="datetime-local" formControlName="fecha_hora" />
+            @if (
+              formularioCita.get('fecha_hora')?.touched &&
+              formularioCita.get('fecha_hora')?.invalid
+            ) {
+              <span class="campo__error">Fecha y hora obligatorias.</span>
+            }
+          </label>
+
+          <label class="campo campo--ancho">
+            <span class="campo__etiqueta">Motivo de la consulta</span>
+            <textarea
+              class="campo__input campo__input--area"
+              rows="3"
+              formControlName="motivo"
+              placeholder="Describa el motivo de la cita"
+            ></textarea>
+            @if (formularioCita.get('motivo')?.touched && formularioCita.get('motivo')?.invalid) {
+              <span class="campo__error">Motivo obligatorio (máx. 500 caracteres).</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id estado de cita</span>
+            <input
+              class="campo__input"
+              type="number"
+              min="1"
+              formControlName="estado_cita_id_estado_cita"
+            />
+            @if (
+              formularioCita.get('estado_cita_id_estado_cita')?.touched &&
+              formularioCita.get('estado_cita_id_estado_cita')?.invalid
+            ) {
+              <span class="campo__error">Id de estado obligatorio (≥ 1).</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id profesional</span>
+            <input
+              class="campo__input"
+              type="number"
+              min="1"
+              formControlName="profesional_id_profesional"
+            />
+            @if (
+              formularioCita.get('profesional_id_profesional')?.touched &&
+              formularioCita.get('profesional_id_profesional')?.invalid
+            ) {
+              <span class="campo__error">Id de profesional obligatorio (≥ 1).</span>
+            }
+          </label>
+
+          <label class="campo">
+            <span class="campo__etiqueta">Id paciente</span>
+            <input
+              class="campo__input"
+              type="number"
+              min="1"
+              formControlName="paciente_id_paciente"
+            />
+            @if (
+              formularioCita.get('paciente_id_paciente')?.touched &&
+              formularioCita.get('paciente_id_paciente')?.invalid
+            ) {
+              <span class="campo__error">Id de paciente obligatorio (≥ 1).</span>
+            }
+          </label>
+        </div>
+
+        <div class="formulario__acciones">
+          <button class="btn btn--primario" type="submit" [disabled]="guardando()">
+            {{ idCitaEnEdicion() === null ? 'Agendar' : 'Actualizar' }}
+          </button>
+          <button
+            class="btn btn--secundario"
+            type="button"
+            (click)="prepararFormularioNuevo()"
+            [disabled]="guardando()"
+          >
+            Limpiar / Nuevo
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <section class="tarjeta" aria-labelledby="titulo-lista">
+      <h2 id="titulo-lista" class="tarjeta__titulo">Listado de citas</h2>
+
+      @if (cargando()) {
+        <p class="estado estado--carga">Cargando citas...</p>
+      } @else {
+        <div class="tabla-envoltorio">
+          <table class="tabla-citas">
+            <thead>
+              <tr>
+                <th>Id</th>
+                <th>Fecha y hora</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+                <th>Profesional</th>
+                <th>Paciente</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (cita of citas(); track cita.id_cita) {
+                <tr>
+                  <td>{{ cita.id_cita }}</td>
+                  <td>{{ formatearFechaHoraTabla(cita.fecha_hora) }}</td>
+                  <td class="tabla-citas__motivo">{{ cita.motivo }}</td>
+                  <td>{{ cita.estado_cita_id_estado_cita }}</td>
+                  <td>{{ cita.profesional_id_profesional }}</td>
+                  <td>{{ cita.paciente_id_paciente }}</td>
+                  <td class="tabla-citas__acciones">
+                    <button
+                      type="button"
+                      class="btn btn--enlace"
+                      (click)="editarCita(cita)"
+                      [disabled]="guardando()"
+                    >
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn--peligro"
+                      (click)="eliminarCita(cita)"
+                      [disabled]="guardando()"
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="7" class="estado estado--vacio">No hay citas registradas.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </div>
+</div>
