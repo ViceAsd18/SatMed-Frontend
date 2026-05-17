@@ -4,7 +4,7 @@ export const environment = {
     "urlDireccion" : "http://localhost:8081",
     "urlRol" : "http://localhost:6500",
     "urlUsuario" : "http://localhost:7575",
-    "apiUrl" : "http://localhost:7575",
+    "apiUrl" : "http://localhost:8085/api",
     "urlGenero" : "http://localhost:7120",
 
 };
