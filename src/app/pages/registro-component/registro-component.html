@@ -1,0 +1,267 @@
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+
+<div class="page-shell">
+  <main class="main">
+    <div class="form-wrap">
+      <section class="card">
+        <div class="card-head">
+          <h1>SAT-MED</h1>
+          <p>Portal de Registro de Usuario</p>
+        </div>
+
+        <div class="progress-meta">
+          <span>Paso {{ currentStep }} de 3</span>
+        </div>
+
+        <div class="progressbar" aria-label="Progreso del registro">
+          <div class="progressbar-track">
+            <span class="seg" [class.active]="currentStep >= 1"></span>
+            <span class="seg" [class.active]="currentStep >= 2"></span>
+            <span class="seg" [class.active]="currentStep >= 3"></span>
+          </div>
+        </div>
+
+        <form [formGroup]="registroForm" (ngSubmit)="onSubmit()" class="form-grid" novalidate>
+          @if (currentStep === 1) {
+            <section class="section">
+              <h2>Información Personal</h2>
+
+              <div class="grid-2">
+                <div class="field field-full">
+                  <input id="rutUsuario" type="text" placeholder=" " formControlName="rutUsuario" />
+                  <label for="rutUsuario">RUT</label>
+                  <small class="hint">Ej: 12.345.678-k</small>
+                  @if (isInvalid('rutUsuario')) {
+                    <p class="error">{{ getError('rutUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field">
+                  <input id="pnombreUsuario" type="text" placeholder=" " formControlName="pnombreUsuario" />
+                  <label for="pnombreUsuario">Primer Nombre</label>
+                  @if (isInvalid('pnombreUsuario')) {
+                    <p class="error">{{ getError('pnombreUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field">
+                  <input id="snombreUsuario" type="text" placeholder=" " formControlName="snombreUsuario" />
+                  <label for="snombreUsuario">Segundo Nombre</label>
+                </div>
+
+                <div class="field">
+                  <input id="apaternoUsuario" type="text" placeholder=" " formControlName="apaternoUsuario" />
+                  <label for="apaternoUsuario">Apellido Paterno</label>
+                  @if (isInvalid('apaternoUsuario')) {
+                    <p class="error">{{ getError('apaternoUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field">
+                  <input id="amaternoUsuario" type="text" placeholder=" " formControlName="amaternoUsuario" />
+                  <label for="amaternoUsuario">Apellido Materno</label>
+                  @if (isInvalid('amaternoUsuario')) {
+                    <p class="error">{{ getError('amaternoUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field field-full">
+                  <input id="emailUsuario" type="email" placeholder=" " formControlName="emailUsuario" />
+                  <label for="emailUsuario">Email</label>
+                  @if (isInvalid('emailUsuario')) {
+                    <p class="error">{{ getError('emailUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field field-full">
+                  <input id="telefonoUsuario" type="text" placeholder=" " formControlName="telefonoUsuario" />
+                  <label for="telefonoUsuario">Teléfono</label>
+                  @if (isInvalid('telefonoUsuario')) {
+                    <p class="error">{{ getError('telefonoUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field field-full birthdate-field">
+                  <span class="group-label">Fecha de Nacimiento</span>
+
+                  <div class="date-group">
+                    <div class="field date-part">
+                      <input id="diaNacimientoUsuario" type="text" placeholder=" " formControlName="diaNacimientoUsuario" maxlength="2" />
+                      <label for="diaNacimientoUsuario">Día</label>
+                      @if (isInvalid('diaNacimientoUsuario')) {
+                        <p class="error">{{ getError('diaNacimientoUsuario') }}</p>
+                      }
+                    </div>
+
+                    <div class="field date-part select-date">
+                      <select id="mesNacimientoUsuario" formControlName="mesNacimientoUsuario">
+                        <option value="" disabled selected hidden></option>
+                        <option value="01">Enero</option>
+                        <option value="02">Febrero</option>
+                        <option value="03">Marzo</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Mayo</option>
+                        <option value="06">Junio</option>
+                        <option value="07">Julio</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Diciembre</option>
+                      </select>
+                      <label for="mesNacimientoUsuario">Mes</label>
+                      @if (isInvalid('mesNacimientoUsuario')) {
+                        <p class="error">{{ getError('mesNacimientoUsuario') }}</p>
+                      }
+                    </div>
+
+                    <div class="field date-part">
+                      <input id="anioNacimientoUsuario" type="text" placeholder=" " formControlName="anioNacimientoUsuario" maxlength="4" />
+                      <label for="anioNacimientoUsuario">Año</label>
+                      @if (isInvalid('anioNacimientoUsuario')) {
+                        <p class="error">{{ getError('anioNacimientoUsuario') }}</p>
+                      }
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </section>
+          }
+
+          @if (currentStep === 2) {
+            <section class="section">
+              <h2>Dirección</h2>
+
+              <div class="grid-2">
+                <div class="field field-full">
+                  <input id="calleUsuario" type="text" placeholder=" " formControlName="calleUsuario" />
+                  <label for="calleUsuario">Calle</label>
+                  @if (isInvalid('calleUsuario')) {
+                    <p class="error">{{ getError('calleUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field field-full">
+                  <input id="numeroUsuario" type="text" placeholder=" " formControlName="numeroUsuario" />
+                  <label for="numeroUsuario">Número</label>
+                  @if (isInvalid('numeroUsuario')) {
+                    <p class="error">{{ getError('numeroUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field field-full select-field" [class.filled]="!!registroForm.get('regionUsuario')?.value">
+                  <select id="regionUsuario" formControlName="regionUsuario">
+                    <option value="" disabled hidden></option>
+
+                    @for (region of regiones; track region.idRegion) {
+                      <option [value]="region.idRegion">
+                        {{ region.nombreRegion }}
+                      </option>
+                    }
+                  </select>
+
+                  <label class="select-label" for="regionUsuario">Región</label>
+
+                  @if (isInvalid('regionUsuario')) {
+                    <p class="error">{{ getError('regionUsuario') }}</p>
+                  }
+                </div>
+
+
+                <div class="field field-full select-field" [class.filled]="!!registroForm.get('comunaUsuario')?.value">
+                  <select id="comunaUsuario" formControlName="comunaUsuario">
+                    <option value="" disabled hidden></option>
+
+                    @for (comuna of comunas; track comuna.idComuna) {
+                      <option [value]="comuna.nombreComuna">
+                        {{ comuna.nombreComuna }}
+                      </option>
+                    }
+                  </select>
+
+                  <label class="select-label" for="comunaUsuario">Comuna</label>
+
+                  @if (isInvalid('comunaUsuario')) {
+                    <p class="error">{{ getError('comunaUsuario') }}</p>
+                  }
+                </div>
+
+
+              </div>
+            </section>
+          }
+
+          @if (currentStep === 3) {
+            <section class="section">
+              <h2>Seguridad de la Cuenta</h2>
+
+              <div class="grid-2">
+                <div class="field field-full">
+                  <input id="contrasenaUsuario" [type]="showPassword ? 'text' : 'password'" placeholder=" " formControlName="contrasenaUsuario" />
+                  <label for="contrasenaUsuario">Contraseña</label>
+                  <button type="button" class="icon-btn" (click)="togglePassword()">
+                    <span class="material-symbols-outlined">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
+                  </button>
+                  @if (isInvalid('contrasenaUsuario')) {
+                    <p class="error">{{ getError('contrasenaUsuario') }}</p>
+                  }
+                </div>
+
+                <div class="field field-full">
+                  <input id="confirmarContrasenaUsuario" [type]="showConfirmPassword ? 'text' : 'password'" placeholder=" " formControlName="confirmarContrasenaUsuario" />
+                  <label for="confirmarContrasenaUsuario">Confirmar Contraseña</label>
+                  <button type="button" class="icon-btn" (click)="toggleConfirmPassword()">
+                    <span class="material-symbols-outlined">{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</span>
+                  </button>
+                  @if (isInvalid('confirmarContrasenaUsuario')) {
+                    <p class="error">{{ getError('confirmarContrasenaUsuario') }}</p>
+                  }
+                </div>
+
+                @if (registroForm.errors?.['passwordMismatch'] && (registroForm.touched || submitted)) {
+                  <p class="error field-full">Las contraseñas no coinciden.</p>
+                }
+
+                <label class="terms field-full">
+                  <input type="checkbox" formControlName="terminos" />
+                  <span>Acepto los términos de servicio, política de privacidad y el manejo de datos sensibles bajo protocolos de seguridad clínica.</span>
+                </label>
+
+                @if (isInvalid('terminos')) {
+                  <p class="error field-full">{{ getError('terminos') }}</p>
+                }
+              </div>
+            </section>
+          }
+
+          <div class="actions">
+            <button type="button" class="btn-secondary" (click)="prevStep()" [disabled]="currentStep === 1">Atrás</button>
+
+            @if (currentStep < 3) {
+              <button type="button" class="btn-primary" (click)="nextStep()">
+                Siguiente
+                <span class="material-symbols-outlined">arrow_forward</span>
+              </button>
+            } @else {
+              <button type="submit" class="btn-primary btn-submit" [disabled]="loading">
+                @if (loading) {
+                  <svg class="spinner" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                    <circle class="spinner-track" cx="12" cy="12" r="10"></circle>
+                    <path class="spinner-head" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                }
+                Finalizar Registro
+              </button>
+            }
+          </div>
+
+          <div class="login-link">
+            <span>¿Ya tienes cuenta?</span>
+            <a href="#">Inicia sesión</a>
+          </div>
+        </form>
+      </section>
+    </div>
+  </main>
+</div>

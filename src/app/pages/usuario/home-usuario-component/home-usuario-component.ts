@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Especialidad } from '../../../models/Especialidad';
-import { EspecialidadesService } from '../../../services/especialidad-service';
+import { EspecialidadesService } from '../../../services/EspecialidadService/especialidad-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-home-usuario',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   templateUrl: './home-usuario-component.html',
   styleUrls: ['./home-usuario-component.css']
 })
