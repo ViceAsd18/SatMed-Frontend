@@ -12,6 +12,8 @@ import { RegionService } from '../../services/RegionService/region-service';
 import { ComunaService } from '../../services/ComunaService/comuna-service';
 import { Region } from '../../models/Region';
 import { Comuna } from '../../models/Comuna';
+import { Genero } from '../../models/Genero';
+import { GeneroService } from '../../services/GeneroService/genero-service';
 
 @Component({
   selector: 'app-registro-component',
@@ -24,9 +26,11 @@ export class RegistroComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly regionService = inject(RegionService);
   private readonly comunaService = inject(ComunaService);
+  private readonly generoService = inject(GeneroService);
 
   regiones: Region[] = [];
   comunas: Comuna[] = [];
+  generos: Genero[] = [];
 
   currentStep = 1;
   loading = false;
@@ -35,6 +39,7 @@ export class RegistroComponent implements OnInit {
   showConfirmPassword = false;
   cargandoRegiones = false;
   cargandoComunas = false;
+  cargandoGeneros = false;
 
   readonly registroForm = this.fb.group(
     {
@@ -52,6 +57,7 @@ export class RegistroComponent implements OnInit {
       numeroUsuario: ['', [Validators.required, Validators.pattern(/^[0-9]+$/)]],
       regionUsuario: ['', [Validators.required]],
       comunaUsuario: ['', [Validators.required, Validators.minLength(2)]],
+      idGenero: ['', [Validators.required]],
       contrasenaUsuario: ['', [Validators.required, Validators.minLength(8)]],
       confirmarContrasenaUsuario: ['', [Validators.required]],
       terminos: [false, [Validators.requiredTrue]]
@@ -61,6 +67,7 @@ export class RegistroComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarRegiones();
+    this.cargarGeneros();
     this.configurarCambioRegion();
   }
 
@@ -75,6 +82,21 @@ export class RegistroComponent implements OnInit {
       error: () => {
         this.regiones = [];
         this.cargandoRegiones = false;
+      }
+    });
+  }
+
+  cargarGeneros(): void {
+    this.cargandoGeneros = true;
+
+    this.generoService.obtenerGeneros().subscribe({
+      next: (data) => {
+        this.generos = data;
+        this.cargandoGeneros = false;
+      },
+      error: () => {
+        this.generos = [];
+        this.cargandoGeneros = false;
       }
     });
   }
@@ -197,7 +219,7 @@ export class RegistroComponent implements OnInit {
         'anioNacimientoUsuario'
       ];
     }
-    if (step === 2) return ['calleUsuario', 'numeroUsuario', 'regionUsuario', 'comunaUsuario'];
+    if (step === 2) return ['calleUsuario', 'numeroUsuario', 'regionUsuario', 'comunaUsuario', 'idGenero'];
     return ['contrasenaUsuario', 'confirmarContrasenaUsuario', 'terminos'];
   }
 

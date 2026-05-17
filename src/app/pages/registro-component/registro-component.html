@@ -81,6 +81,25 @@
                   }
                 </div>
 
+                <div class="field field-full select-field" [class.filled]="!!registroForm.get('idGenero')?.value">
+                  <select id="idGenero" formControlName="idGenero">
+                    <option value="" disabled hidden></option>
+
+                    @for (genero of generos; track genero.idGenero) {
+                      <option [value]="genero.idGenero">
+                        {{ genero.nombreGenero }}
+                      </option>
+                    }
+                  </select>
+
+                  <label class="select-label" for="idGenero">Género</label>
+
+                  @if (isInvalid('idGenero')) {
+                    <p class="error">{{ getError('idGenero') }}</p>
+                  }
+                </div>
+
+
                 <div class="field field-full birthdate-field">
                   <span class="group-label">Fecha de Nacimiento</span>
 
