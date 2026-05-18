@@ -5,6 +5,7 @@ import { ProfesionalComponent } from './pages/profesional/profesional.component'
 import { CitaComponent } from './pages/cita/cita.component';
 import { RegistroComponent } from './pages/registro-component/registro-component';
 import { AdminComponent } from './pages/admin/admin';
+import { LoginComponent } from './pages/login-component/login-component';
 
 export const routes: Routes = [
 
@@ -27,6 +28,11 @@ export const routes: Routes = [
     {
         path : 'registro',
         component : RegistroComponent
+    },
+
+    {
+        path: 'login',
+        component: LoginComponent
     },
 
     { path: 'admin', component: AdminComponent },

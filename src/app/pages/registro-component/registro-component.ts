@@ -9,6 +9,7 @@ import {
   Validators
 } from '@angular/forms';
 
+import { Router, RouterLink } from '@angular/router';
 import { RegionService } from '../../services/RegionService/region-service';
 import { ComunaService } from '../../services/ComunaService/comuna-service';
 import { Region } from '../../models/Region';
@@ -20,16 +21,18 @@ import { UsuarioService } from '../../services/UsuarioService/usuario-service';
 @Component({
   selector: 'app-registro-component',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './registro-component.html',
   styleUrl: './registro-component.css'
 })
 export class RegistroComponent implements OnInit {
+  
   private readonly fb = inject(FormBuilder);
   private readonly regionService = inject(RegionService);
   private readonly comunaService = inject(ComunaService);
   private readonly generoService = inject(GeneroService);
   private readonly usuarioService = inject(UsuarioService);
+  private readonly router = inject(Router);
 
   regiones: Region[] = [];
   comunas: Comuna[] = [];
@@ -199,7 +202,8 @@ export class RegistroComponent implements OnInit {
     this.usuarioService.registrarUsuario(payload).subscribe({
       next: (resp) => {
         this.loading = false;
-        console.log('Usuario registrado', resp);
+        alert('Usuario registrado correctamente');
+        this.router.navigate(['/login']);
       },
       error: (err) => {
         this.loading = false;
