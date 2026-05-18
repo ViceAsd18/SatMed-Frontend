@@ -1,21 +1,4 @@
 <div class="home-page">
-  <header class="topbar">
-    <div class="container topbar__inner">
-      <a class="brand" href="#" aria-label="SAT-MED inicio">
-        <span class="brand__mark">+</span>
-        <span class="brand__text">SAT-MED</span>
-      </a>
-
-      <nav class="nav" aria-label="Navegación principal">
-        <a href="#especialidades">Especialidades</a>
-        <a href="#horarios">Horarios</a>
-        <a href="#ayuda">Ayuda y Contacto</a>
-      </nav>
-
-      <a class="btn btn--primary btn--sm" href="#acceso">Acceder</a>
-    </div>
-  </header>
-
   <main>
     <section class="hero">
       <div class="container hero__inner">
@@ -38,7 +21,7 @@
 
         <div class="hero__visual">
           <div class="device-card">
-            <img src="/img/home/sat-med-hero.png" alt="SAT-MED Hero">
+            <img src="/img/home/sat-med-hero.png" alt="SAT-MED Hero" />
 
             <div class="floating-card">
               <span class="floating-card__icon">🛡️</span>
@@ -51,38 +34,35 @@
 
     <section class="cards-section">
       <div class="container cards-grid">
-
         <article id="especialidades" class="info-card">
-            <div class="info-card__header">
-                <h2>Especialidades</h2>
-                <span class="info-card__icon">🩺</span>
-            </div>
+          <div class="info-card__header">
+            <h2>Especialidades</h2>
+            <span class="info-card__icon">🩺</span>
+          </div>
 
-            @if (especialidades$ | async; as especialidades) {
-                <ul class="specialty-list">
-                @for (especialidad of especialidades; track especialidad.idEspecialidad) {
-                    <li>
+          @if (especialidades$ | async; as especialidades) {
+            @if (especialidades.length > 0) {
+              <ul class="specialty-list">
+                @for (especialidad of especialidades | slice:0:4; track especialidad.idEspecialidad) {
+                  <li>
                     <img
-                        class="list-image"
-                        [src]="obtenerImagenEspecialidad(especialidad.idEspecialidad)"
-                        [alt]="especialidad.nombreEspecialidad"
+                      class="list-image"
+                      [src]="obtenerImagenEspecialidad(especialidad.idEspecialidad)"
+                      [alt]="especialidad.nombreEspecialidad"
                     />
                     <span>{{ especialidad.nombreEspecialidad }}</span>
-                    </li>
-                } @empty {
-                    <li class="empty-state">No hay especialidades disponibles.</li>
+                  </li>
                 }
-                </ul>
+              </ul>
             } @else {
-                <p class="loading-state">Cargando especialidades...</p>
+              <p class="empty-state">No hay especialidades disponibles.</p>
             }
+          } @else {
+            <p class="loading-state">Cargando especialidades...</p>
+          }
 
-            <p class="card-footnote">Conectando con nuestra red de especialistas...</p>
+          <p class="card-footnote">Conectando con nuestra red de especialistas...</p>
         </article>
-
-
-        
-
 
         <article id="horarios" class="info-card">
           <div class="info-card__header">
