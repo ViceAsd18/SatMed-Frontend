@@ -6,5 +6,7 @@ export const environment = {
     "urlUsuario" : "http://localhost:7575",
     "apiUrl" : "http://localhost:8085/api",
     "urlGenero" : "http://localhost:7120",
-
+    "urlTratamiento" : "http://localhost:7100",
+    "urlAtencionMedica" : "http://localhost:7280",
+    "urlCitas" : "http://localhost:8085"
 };

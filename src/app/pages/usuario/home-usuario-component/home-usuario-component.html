@@ -1,154 +1,276 @@
-<div class="home-page">
-  <main>
-    <section class="hero">
-      <div class="container hero__inner">
-        <div class="hero__content">
-          <span class="badge">INNOVACIÓN EN SALUD</span>
+<div
+  *ngIf="sidebarOpen"
+  class="sidebar-overlay"
+  (click)="closeSidebar()">
+</div>
 
-          <h1>Evolución digital en salud</h1>
+<aside class="sidebar" [class.sidebar--open]="sidebarOpen">
+  <div class="sidebar__logo">
+    <h1>SAT-MED</h1>
+  </div>
 
-          <p>
-            Transformando la atención médica a través de la innovación digital.
-            Una plataforma integrada diseñada para la máxima precisión clínica
-            y comodidad del paciente.
-          </p>
+  <nav class="sidebar__nav">
+    <a class="nav-item nav-item--active" href="#">
+      <span class="material-symbols-outlined nav-item__icon">home</span>
+      <span>Inicio</span>
+    </a>
+    <a class="nav-item" routerLink="/citas">
+      <span class="material-symbols-outlined nav-item__icon">calendar_today</span>
+      <span>Mis Citas</span>
+    </a>
+    <a class="nav-item" routerLink="/historial">
+      <span class="material-symbols-outlined nav-item__icon">history_edu</span>
+      <span>Historial Clínico</span>
+    </a>
+    <a class="nav-item" routerLink="/mensajes">
+      <span class="material-symbols-outlined nav-item__icon">mail</span>
+      <span>Mensajería</span>
+    </a>
+  </nav>
 
-          <div class="hero__actions">
-            <a class="btn btn--accent" href="/registro">Registrarse</a>
-            <a class="btn btn--outline" href="/login">Iniciar Sesión</a>
-          </div>
+  <div class="sidebar__footer">
+    <a class="nav-item" href="#">
+      <span class="material-symbols-outlined nav-item__icon">help</span>
+      <span>Ayuda</span>
+    </a>
+    <a class="nav-item nav-item--danger" href="#">
+      <span class="material-symbols-outlined nav-item__icon">logout</span>
+      <span>Cerrar Sesión</span>
+    </a>
+  </div>
+</aside>
+
+<div class="main-wrapper">
+
+  <header class="topbar">
+    <button class="topbar__menu-btn" (click)="toggleSidebar()">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+
+    <div class="topbar__right">
+      <button class="topbar__notif-btn">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="notif-dot"></span>
+      </button>
+
+      <div class="topbar__user">
+        <div class="topbar__user-info">
+          <p class="topbar__user-name">{{ nombrePaciente }}</p>
+          <p class="topbar__user-id">Paciente {{ numeroPaciente }}</p>
         </div>
+        <div class="topbar__avatar">
+          {{ nombrePaciente.charAt(0) }}
+        </div>
+      </div>
+    </div>
+  </header>
 
-        <div class="hero__visual">
-          <div class="device-card">
-            <img src="/img/home/sat-med-hero.png" alt="SAT-MED Hero" />
+  <main class="dashboard">
 
-            <div class="floating-card">
-              <span class="floating-card__icon">🛡️</span>
-              <span>Sistema Certificado de Alta Precisión</span>
+    <div *ngIf="loading" class="dashboard__loading">
+      <div class="spinner"></div>
+      <p>Cargando tu información...</p>
+    </div>
+
+    <div *ngIf="error && !loading" class="dashboard__error">
+      <span class="material-symbols-outlined">error_outline</span>
+      <p>{{ error }}</p>
+      <button class="btn btn--primary" (click)="cargarDashboard()">Reintentar</button>
+    </div>
+
+    <ng-container *ngIf="!loading && !error">
+
+      <section class="dashboard__welcome">
+        <h2 class="welcome__title">¡Hola, {{ nombrePaciente.split(' ')[0] }}!</h2>
+        <p class="welcome__subtitle">Bienvenido a tu Portal de Salud. Aquí tienes un resumen de tu estado actual.</p>
+      </section>
+
+      <div class="dashboard__grid">
+
+        <div class="dashboard__main">
+
+          <div class="card card--featured" *ngIf="proximaCita; else sinCita">
+            <div class="card__header">
+              <div>
+                <span class="badge" [ngClass]="proximaCita.estadoCitaIdEstadoCita === 1 ? 'badge--success' : 'badge--warning'">
+                  <span class="material-symbols-outlined badge__icon">
+                    {{ proximaCita.estadoCitaIdEstadoCita === 1 ? 'check_circle' : 'history' }}
+                  </span>
+                  {{ proximaCita.estadoCitaIdEstadoCita === 1 ? 'Confirmada' : 'Pendiente' }}
+                </span>
+                <h3 class="card__title">Próxima Cita Médica</h3>
+              </div>
+              <div class="date-badge">
+                <span class="date-badge__month">{{ getMes(proximaCita.fechaHora) }}</span>
+                <span class="date-badge__day">{{ getDia(proximaCita.fechaHora) }}</span>
+                <span class="date-badge__time">{{ getHora(proximaCita.fechaHora) }}</span>
+              </div>
+            </div>
+
+            <div class="cita__details">
+              <div class="cita__detail-item">
+                <div class="detail-icon">
+                  <span class="material-symbols-outlined">medical_information</span>
+                </div>
+                <div>
+                  <p class="detail-label">Motivo</p>
+                  <p class="detail-value">{{ proximaCita.motivoCita }}</p>
+                </div>
+              </div>
+              <div class="cita__detail-item">
+                <div class="detail-icon">
+                  <span class="material-symbols-outlined">person</span>
+                </div>
+                <div>
+                  <p class="detail-label">Profesional ID</p>
+                  <p class="detail-value">Prof. #{{ proximaCita.profesionalIdProfesional }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="card__actions">
+              <button class="btn btn--primary">Modificar Cita</button>
+              <button class="btn btn--outline" (click)="cancelarCita()">Cancelar Cita</button>
+              <span class="cita__id">
+                <span class="material-symbols-outlined">fingerprint</span>
+                ID Cita: {{ proximaCita.id_cita }}
+              </span>
             </div>
           </div>
+
+          <ng-template #sinCita>
+            <div class="card card--empty">
+              <span class="material-symbols-outlined empty-icon">event_busy</span>
+              <p>No tienes citas próximas agendadas.</p>
+              <button class="btn btn--primary">Agendar Nueva Cita</button>
+            </div>
+          </ng-template>
+
+          <div class="card card--treatment" *ngIf="tratamientoActivo; else sinTratamiento">
+            <div class="treatment__header">
+              <div class="treatment__icon-wrap">
+                <span class="material-symbols-outlined">pill</span>
+              </div>
+              <div>
+                <p class="treatment__label">Tratamiento Activo</p>
+                <p class="treatment__name">{{ tratamientoActivo.descripcionTratamiento }}</p>
+              </div>
+            </div>
+
+            <div class="treatment__info">
+              <div>
+                <p class="detail-label">Duración</p>
+                <p class="detail-value">
+                  {{ formatFechaCorta(tratamientoActivo.fechaInicio) }} —
+                  {{ formatFechaCorta(tratamientoActivo.fechaFin) }}
+                </p>
+              </div>
+              <div class="treatment__status">
+                <p class="detail-label">Estado</p>
+                <span class="status-chip status-chip--active">En progreso</span>
+              </div>
+            </div>
+
+            <button class="btn btn--dashed">
+              <span class="material-symbols-outlined">picture_as_pdf</span>
+              Descargar Receta (PDF)
+            </button>
+          </div>
+
+          <ng-template #sinTratamiento>
+            <div class="card card--empty">
+              <span class="material-symbols-outlined empty-icon">medication_liquid</span>
+              <p>No tienes tratamientos activos actualmente.</p>
+            </div>
+          </ng-template>
+
+        </div>
+
+        <div class="dashboard__sidebar">
+
+          <div class="card card--summary">
+            <div class="summary__icon-wrap">
+              <span class="material-symbols-outlined">event_note</span>
+            </div>
+            <p class="summary__label">Resumen de Citas</p>
+            <div class="summary__count">
+              <span class="summary__number">{{ citasPendientes.toString().padStart(2, '0') }}</span>
+              <span class="summary__unit">Pendientes</span>
+            </div>
+            <button class="btn btn--primary btn--full">
+              <span class="material-symbols-outlined">add</span>
+              Agendar Nueva Cita
+            </button>
+          </div>
+
+          <div class="card" *ngIf="ultimaAtencion; else sinAtencion">
+            <div class="last-attention__header">
+              <div class="treatment__icon-wrap treatment__icon-wrap--tertiary">
+                <span class="material-symbols-outlined">history</span>
+              </div>
+              <span class="last-attention__date">{{ formatFechaCorta(ultimaAtencion.fechaAtencion) }}</span>
+            </div>
+
+            <p class="card__subtitle">Última Atención Médica</p>
+
+            <div class="last-attention__diagnostico">
+              <p class="detail-label">Diagnóstico</p>
+              <p class="diagnostico__text">"{{ ultimaAtencion.diagnostico }}"</p>
+            </div>
+
+            <p class="last-attention__indicaciones">{{ ultimaAtencion.indicaciones }}</p>
+
+            <button class="btn btn--ghost btn--full">Ver Ficha Completa</button>
+          </div>
+
+          <ng-template #sinAtencion>
+            <div class="card card--empty">
+              <span class="material-symbols-outlined empty-icon">medical_services</span>
+              <p>Sin atenciones médicas registradas.</p>
+            </div>
+          </ng-template>
+
+          <div class="card card--tip">
+            <span class="material-symbols-outlined tip__icon">lightbulb</span>
+            <h4 class="tip__title">Consejo de Salud</h4>
+            <p class="tip__body">
+              No olvides hidratarte. Beber al menos 2 litros de agua al día mejora tu recuperación.
+            </p>
+          </div>
+
         </div>
       </div>
-    </section>
-
-    <section class="cards-section">
-      <div class="container cards-grid">
-        <article id="especialidades" class="info-card">
-          <div class="info-card__header">
-            <h2>Especialidades</h2>
-            <span class="info-card__icon">🩺</span>
-          </div>
-
-          @if (especialidades$ | async; as especialidades) {
-            @if (especialidades.length > 0) {
-              <ul class="specialty-list">
-                @for (especialidad of especialidades | slice:0:4; track especialidad.idEspecialidad) {
-                  <li>
-                    <img
-                      class="list-image"
-                      [src]="obtenerImagenEspecialidad(especialidad.idEspecialidad)"
-                      [alt]="especialidad.nombreEspecialidad"
-                    />
-                    <span>{{ especialidad.nombreEspecialidad }}</span>
-                  </li>
-                }
-              </ul>
-            } @else {
-              <p class="empty-state">No hay especialidades disponibles.</p>
-            }
-          } @else {
-            <p class="loading-state">Cargando especialidades...</p>
-          }
-
-          <p class="card-footnote">Conectando con nuestra red de especialistas...</p>
-        </article>
-
-        <article id="horarios" class="info-card">
-          <div class="info-card__header">
-            <h2>Horarios</h2>
-            <span class="info-card__icon">🕒</span>
-          </div>
-
-          <div class="clinic-info">
-            <strong>Clínica en Coquimbo</strong>
-            <p>Av. Costanera 1450, Piso 3</p>
-          </div>
-
-          <table class="schedule-table" aria-label="Horarios de atención">
-            <tbody>
-              <tr>
-                <td>Lunes - Viernes</td>
-                <td>08:00 - 20:00</td>
-              </tr>
-              <tr>
-                <td>Sábado</td>
-                <td>09:00 - 14:00</td>
-              </tr>
-              <tr>
-                <td>Domingo</td>
-                <td class="closed">Cerrado</td>
-              </tr>
-            </tbody>
-          </table>
-
-          <a class="btn btn--schedule" href="#disponibilidad">Ver Disponibilidad</a>
-        </article>
-
-        <article id="ayuda" class="info-card">
-          <div class="info-card__header">
-            <h2>Ayuda y Contacto</h2>
-            <span class="info-card__icon">?</span>
-          </div>
-
-          <div class="help-list">
-            <a class="help-item" href="#centro-ayuda">
-              <span class="help-item__icon">📘</span>
-              <span>
-                <strong>Centro de Ayuda</strong>
-                <small>Preguntas frecuentes</small>
-              </span>
-            </a>
-
-            <a class="help-item" href="#soporte">
-              <span class="help-item__icon">🎧</span>
-              <span>
-                <strong>Soporte 24/7</strong>
-                <small>Chat con especialista</small>
-              </span>
-            </a>
-
-            <a class="help-item" href="mailto:contacto@sat-med.com">
-              <span class="help-item__icon">✉</span>
-              <span>
-                <strong>Email</strong>
-                <small>contacto@sat-med.com</small>
-              </span>
-            </a>
-          </div>
-        </article>
-      </div>
-    </section>
+    </ng-container>
   </main>
 
   <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__left">
-        <strong>SAT-MED</strong>
-        <p>© 2026 SAT-MED. Todos los derechos reservados.</p>
-      </div>
-
-      <div class="footer__center">
-        <a href="#privacidad">Privacidad</a>
-        <a href="#terminos">Términos de Uso</a>
-        <a href="#contacto">Contacto</a>
-      </div>
-
-      <div class="footer__right" aria-label="Redes sociales">
-        <a href="#" aria-label="Facebook">🌐</a>
-        <a href="#" aria-label="Instagram">◎</a>
-        <a href="#" aria-label="LinkedIn">in</a>
-      </div>
+    <div class="footer__inner">
+      <span class="footer__brand">SAT-MED</span>
+      <span class="footer__copy">© 2025 Todos los derechos reservados.</span>
+      <nav class="footer__links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Contacto</a>
+      </nav>
     </div>
   </footer>
 </div>
+
+<nav class="mobile-nav">
+  <button class="mobile-nav__item mobile-nav__item--active">
+    <span class="material-symbols-outlined">home</span>
+    <span>Inicio</span>
+  </button>
+  <button class="mobile-nav__item">
+    <span class="material-symbols-outlined">calendar_today</span>
+    <span>Citas</span>
+  </button>
+  <button class="mobile-nav__item">
+    <span class="material-symbols-outlined">history_edu</span>
+    <span>Historial</span>
+  </button>
+  <button class="mobile-nav__item">
+    <span class="material-symbols-outlined">person</span>
+    <span>Perfil</span>
+  </button>
+</nav>

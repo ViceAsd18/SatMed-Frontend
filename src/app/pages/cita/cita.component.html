@@ -126,11 +126,11 @@
               @for (cita of citas(); track cita.id_cita) {
                 <tr>
                   <td>{{ cita.id_cita }}</td>
-                  <td>{{ formatearFechaHoraTabla(cita.fecha_hora) }}</td>
-                  <td class="tabla-citas__motivo">{{ cita.motivo }}</td>
-                  <td>{{ cita.estado_cita_id_estado_cita }}</td>
-                  <td>{{ cita.profesional_id_profesional }}</td>
-                  <td>{{ cita.paciente_id_paciente }}</td>
+                  <td>{{ formatearFechaHoraTabla(cita.fechaHora) }}</td>
+                  <td class="tabla-citas__motivo">{{ cita.motivoCita }}</td>
+                  <td>{{ cita.estadoCitaIdEstadoCita }}</td>
+                  <td>{{ cita.profesionalIdProfesional }}</td>
+                  <td>{{ cita.pacienteIdPaciente }}</td>
                   <td class="tabla-citas__acciones">
                     <button
                       type="button"

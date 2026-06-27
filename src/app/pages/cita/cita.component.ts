@@ -75,7 +75,7 @@ export class CitaComponent implements OnInit {
     this.idCitaEnEdicion.set(cita.id_cita);
     this.formularioCita.patchValue({
       ...cita,
-      fecha_hora: this.normalizarFechaHoraParaInput(cita.fecha_hora)
+      fecha_hora: this.normalizarFechaHoraParaInput(cita.fechaHora)
     });
   }
 
@@ -109,11 +109,11 @@ export class CitaComponent implements OnInit {
     const raw = this.formularioCita.getRawValue();
     return {
       id_cita: Number(raw.id_cita ?? 0),
-      fecha_hora: this.formatearFechaHoraParaApi(String(raw.fecha_hora)),
-      motivo: String(raw.motivo).trim(),
-      estado_cita_id_estado_cita: Number(raw.estado_cita_id_estado_cita),
-      profesional_id_profesional: Number(raw.profesional_id_profesional),
-      paciente_id_paciente: Number(raw.paciente_id_paciente)
+      fechaHora: this.formatearFechaHoraParaApi(String(raw.fecha_hora)),
+      motivoCita: String(raw.motivo).trim(),
+      estadoCitaIdEstadoCita: Number(raw.estado_cita_id_estado_cita),
+      profesionalIdProfesional: Number(raw.profesional_id_profesional),
+      pacienteIdPaciente: Number(raw.paciente_id_paciente)
     };
   }
 
@@ -149,7 +149,7 @@ export class CitaComponent implements OnInit {
 
   eliminarCita(cita: Cita): void {
     const confirmar = window.confirm(
-      `¿Eliminar la cita #${cita.id_cita} del paciente ${cita.paciente_id_paciente}?`
+      `¿Eliminar la cita #${cita.id_cita} del paciente ${cita.pacienteIdPaciente}?`
     );
     if (!confirmar) {
       return;
