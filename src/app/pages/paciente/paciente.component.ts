@@ -79,10 +79,10 @@ export class PacienteComponent implements OnInit {
   /** Construye el nombre completo para mostrar en la tabla. */
   obtenerNombreCompleto(paciente: Paciente): string {
     return [
-      paciente.pnombreUsuario,
-      paciente.snombreUsuario,
-      paciente.apaternoUsuario,
-      paciente.amaternoUsuario
+      paciente.usuario.pnombreUsuario,
+      paciente.usuario.snombreUsuario,
+      paciente.usuario.apaternoUsuario,
+      paciente.usuario.amaternornoUsuario
     ]
       .filter((parte) => parte?.trim().length > 0)
       .join(' ');
@@ -127,14 +127,14 @@ export class PacienteComponent implements OnInit {
   }
 
   editarPaciente(paciente: Paciente): void {
-    this.idUsuarioEnEdicion.set(paciente.idUsuario);
+    this.idUsuarioEnEdicion.set(paciente.usuario.idUsuario);
     this.formularioPaciente.patchValue({
       ...paciente,
       fechaNacimientoUsuario: this.normalizarFechaParaInput(
-        paciente.fechaNacimientoUsuario
+        paciente.usuario.fechaNacimientoUsuario
       ),
       fechaCreacionUsuario: this.normalizarFechaParaInput(
-        paciente.fechaCreacionUsuario
+        paciente.usuario.fechaCreacionUsuario
       )
     });
   }
@@ -189,20 +189,20 @@ export class PacienteComponent implements OnInit {
 
   eliminarPaciente(paciente: Paciente): void {
     const confirmar = window.confirm(
-      `¿Eliminar al paciente con RUT ${paciente.rutUsuario}?`
+      `¿Eliminar al paciente con RUT ${paciente.usuario.rut}?`
     );
     if (!confirmar) {
       return;
     }
-
+    
     this.mensajeError.set(null);
     this.guardando.set(true);
     this.pacienteService
-      .delete(paciente.idUsuario)
+      .delete(paciente.usuario.idUsuario)
       .pipe(finalize(() => this.guardando.set(false)))
       .subscribe({
         next: () => {
-          if (this.idUsuarioEnEdicion() === paciente.idUsuario) {
+          if (this.idUsuarioEnEdicion() === paciente.usuario.idUsuario) {
             this.prepararFormularioNuevo();
           }
           this.cargarPacientes();

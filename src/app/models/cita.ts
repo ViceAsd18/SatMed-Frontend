@@ -1,8 +1,9 @@
 export interface Cita {
-  id_cita?: number;
-  fechaHora: string;
-  motivoCita: string;
-  estadoCitaIdEstadoCita: number;
-  profesionalIdProfesional: number;
-  pacienteIdPaciente: number;
+  idCita?:                   number; 
+  fechaHora:                 string;
+  motivo?:                   string;  
+  motivoCita?:               string; 
+  estadoCitaIdEstadoCita:    number;
+  profesionalIdProfesional:  number;
+  pacienteIdPaciente:        number;
 }

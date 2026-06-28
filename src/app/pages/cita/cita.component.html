@@ -123,9 +123,9 @@
               </tr>
             </thead>
             <tbody>
-              @for (cita of citas(); track cita.id_cita) {
+              @for (cita of citas(); track cita.idCita) {
                 <tr>
-                  <td>{{ cita.id_cita }}</td>
+                  <td>{{ cita.idCita }}</td>
                   <td>{{ formatearFechaHoraTabla(cita.fechaHora) }}</td>
                   <td class="tabla-citas__motivo">{{ cita.motivoCita }}</td>
                   <td>{{ cita.estadoCitaIdEstadoCita }}</td>

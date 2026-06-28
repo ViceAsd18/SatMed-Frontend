@@ -152,11 +152,11 @@
               </tr>
             </thead>
             <tbody>
-              @for (paciente of pacientes(); track paciente.idUsuario) {
+              @for (paciente of pacientes(); track paciente.usuario.idUsuario) {
                 <tr>
-                  <td>{{ paciente.rutUsuario }}</td>
+                  <td>{{ paciente.usuario.rut }}</td>
                   <td>{{ obtenerNombreCompleto(paciente) }}</td>
-                  <td>{{ paciente.emailUsuario }}</td>
+                  <td>{{ paciente.usuario.emailUsuario }}</td>
                   <td class="tabla-pacientes__acciones">
                     <button type="button" class="btn btn--enlace" (click)="editarPaciente(paciente)" [disabled]="guardando()">
                       Editar

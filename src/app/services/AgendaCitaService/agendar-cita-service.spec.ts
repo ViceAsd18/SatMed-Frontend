@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
+import { AgendarCitaService } from './agendar-cita-service';
 
-import { AgendarCitaService } from '../agendar-cita-service';
 
 describe('AgendarCitaService', () => {
   let service: AgendarCitaService;

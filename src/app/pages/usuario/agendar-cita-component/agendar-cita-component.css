@@ -602,3 +602,361 @@
   .horarios__grid   { grid-template-columns: repeat(3, 1fr); }
   .col-right        { padding: 1.25rem; }
 }
+
+/* ==========================================================
+   TABS
+========================================================== */
+
+.tabs{
+    display:flex;
+    gap:1rem;
+    margin-bottom:2rem;
+    border-bottom:1px solid var(--outline-variant);
+    overflow-x:auto;
+}
+
+.tab-btn{
+    position:relative;
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:1rem 0;
+    font-size:.95rem;
+    font-weight:600;
+    color:var(--on-surface-variant);
+    display:flex;
+    align-items:center;
+    gap:.5rem;
+    transition:.2s;
+}
+
+.tab-btn:hover{
+    color:var(--primary);
+}
+
+.tab-btn--active{
+    color:var(--primary);
+}
+
+.tab-btn--active::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-1px;
+    width:100%;
+    height:3px;
+    background:var(--primary);
+    border-radius:999px;
+}
+
+.tab-badge{
+    background:var(--primary);
+    color:#fff;
+    font-size:.7rem;
+    padding:.15rem .45rem;
+    border-radius:999px;
+}
+
+.tab-panel{
+    animation:fade .25s ease;
+}
+
+@keyframes fade{
+    from{opacity:0;transform:translateY(8px);}
+    to{opacity:1;transform:none;}
+}
+
+.citas-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(360px,1fr));
+    gap:1.5rem;
+}
+
+.cita-card{
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:var(--shadow-md);
+    border:1px solid rgba(0,0,0,.05);
+    transition:.25s;
+}
+
+.cita-card:hover{
+    transform:translateY(-4px);
+    box-shadow:var(--shadow-lg);
+}
+
+.cita-card__header{
+    padding:1.2rem 1.4rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.cita-card__header--confirmada{
+    background:#eaf7ef;
+}
+
+.cita-card__header--pendiente{
+    background:#eef5ff;
+}
+
+.cita-card__fecha-wrap{
+    display:flex;
+    gap:1rem;
+    align-items:center;
+}
+
+.cita-card__fecha-icon{
+    width:48px;
+    height:48px;
+    border-radius:12px;
+    background:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:var(--primary);
+}
+
+.cita-card__fecha-dia{
+    font-weight:700;
+    margin:0;
+}
+
+.cita-card__hora{
+    margin:0;
+    color:var(--on-surface-variant);
+    font-size:.85rem;
+}
+
+.cita-card__body{
+    padding:1.4rem;
+}
+
+.cita-card__profesional{
+    display:flex;
+    gap:1rem;
+    margin-bottom:1rem;
+}
+
+.cita-card__prof-info h4{
+    margin:0;
+}
+
+.cita-card__prof-esp{
+    margin-top:.3rem;
+    color:var(--on-surface-variant);
+    font-size:.85rem;
+}
+
+.cita-card__detalle-item{
+    display:flex;
+    gap:.5rem;
+    align-items:center;
+    font-size:.85rem;
+    color:var(--on-surface);
+}
+
+.cita-card__actions{
+    display:flex;
+    gap:.75rem;
+    padding:1.2rem 1.4rem;
+    border-top:1px solid rgba(0,0,0,.06);
+}
+
+.estado-badge{
+    padding:.35rem .8rem;
+    border-radius:999px;
+    font-size:.75rem;
+    font-weight:700;
+}
+
+.estado-badge--pendiente{
+    background:#fff4d9;
+    color:#b7791f;
+}
+
+.estado-badge--confirmada{
+    background:#daf5e4;
+    color:#1d7d45;
+}
+
+.estado-badge--realizada{
+    background:#ddeeff;
+    color:#2563eb;
+}
+
+.estado-badge--cancelada{
+    background:#ffe4e4;
+    color:#d92d20;
+}
+
+.estado-badge--no-asistio{
+    background:#ececec;
+    color:#555;
+}
+
+.historial-table-wrap{
+    overflow:auto;
+    background:white;
+    border-radius:18px;
+    box-shadow:var(--shadow-md);
+}
+
+.historial-table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+.historial-table th{
+    text-align:left;
+    padding:1rem;
+    background:var(--surface-low);
+    font-size:.85rem;
+    color:var(--on-surface-variant);
+}
+
+.historial-table td{
+    padding:1rem;
+    border-top:1px solid rgba(0,0,0,.05);
+}
+
+.historial-prof{
+    display:flex;
+    gap:.8rem;
+    align-items:center;
+}
+
+.historial-prof__nombre{
+    font-weight:600;
+}
+
+.historial-prof__esp{
+    font-size:.8rem;
+    color:var(--on-surface-variant);
+}
+
+.historial-fecha,
+.historial-motivo{
+    font-size:.9rem;
+}
+
+.text-right{
+    text-align:right;
+}
+
+.avatar{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    border-radius:50%;
+    background:rgba(37,99,235,.12);
+    color:var(--primary);
+    font-weight:700;
+}
+
+.avatar--md{
+    width:52px;
+    height:52px;
+}
+
+.avatar--sm{
+    width:40px;
+    height:40px;
+    font-size:.8rem;
+}
+
+
+.btn--outline{
+    background:white;
+    border:1px solid var(--primary);
+    color:var(--primary);
+}
+
+.btn--outline:hover{
+    background:var(--primary);
+    color:white;
+}
+
+.btn--danger{
+    background:#d92d20;
+    color:white;
+}
+
+.btn--danger:hover{
+    background:#b42318;
+}
+
+.btn--danger-ghost{
+    background:#fff5f5;
+    color:#d92d20;
+}
+
+.btn--danger-ghost:hover{
+    background:#ffe6e6;
+}
+
+.btn-link{
+    background:none;
+    border:none;
+    color:var(--primary);
+    cursor:pointer;
+    font-weight:600;
+}
+
+
+.modal--sm{
+    max-width:420px;
+}
+
+.modal__body--center{
+    text-align:center;
+}
+
+.modal-warning-icon{
+    width:72px;
+    height:72px;
+    margin:auto;
+    margin-bottom:1rem;
+    border-radius:50%;
+    background:#fff3cd;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:#d97706;
+}
+
+.modal-warning-icon .material-symbols-outlined{
+    font-size:38px;
+}
+
+.modal-cancel__desc{
+    margin:1rem 0 2rem;
+    line-height:1.6;
+    color:var(--on-surface-variant);
+}
+
+
+@media(max-width:768px){
+
+.tabs{
+    gap:.5rem;
+}
+
+.tab-btn{
+    white-space:nowrap;
+}
+
+.citas-grid{
+    grid-template-columns:1fr;
+}
+
+.cita-card__actions{
+    flex-direction:column;
+}
+
+.historial-table{
+    min-width:760px;
+}
+
+}

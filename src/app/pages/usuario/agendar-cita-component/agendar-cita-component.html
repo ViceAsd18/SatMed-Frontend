@@ -1,6 +1,4 @@
-<!-- agendar-cita.component.html
-     El sidebar, topbar, footer y mobile-nav los provee SharedLayoutComponent.
-     Aquí sólo va el contenido de la página. -->
+<!-- agendar-cita.component.html -->
 
 <app-shared-layout>
 
@@ -9,177 +7,344 @@
 
       <!-- HEADER DE PÁGINA -->
       <header class="page-header">
-        <h1 class="page-title">Agendar Nueva Cita</h1>
-        <p class="page-subtitle">Selecciona un especialista y el horario que mejor te convenga.</p>
+        <h1 class="page-title">Mis Horas</h1>
+        <p class="page-subtitle">Gestiona tus próximas citas y revisa tu historial médico.</p>
       </header>
 
-      <div class="layout-grid">
+      <!-- ── PESTAÑAS ── -->
+      <div class="tabs">
+        <button
+          class="tab-btn"
+          [class.tab-btn--active]="tabActiva === 'proximas'"
+          (click)="cambiarTab('proximas')">
+          Próximas Citas
+          <span class="tab-badge" *ngIf="citasProximas.length > 0">{{ citasProximas.length }}</span>
+        </button>
+        <button
+          class="tab-btn"
+          [class.tab-btn--active]="tabActiva === 'historial'"
+          (click)="cambiarTab('historial')">
+          Historial de Citas
+        </button>
+        <button
+          class="tab-btn"
+          [class.tab-btn--active]="tabActiva === 'agendar'"
+          (click)="cambiarTab('agendar')">
+          Agendar Nueva Cita
+        </button>
+      </div>
 
-        <!-- ── COLUMNA IZQUIERDA: Filtros + Lista doctores ── -->
-        <div class="col-left">
+      <!-- ══════════════════════════════════════════
+           PESTAÑA: PRÓXIMAS CITAS
+      ══════════════════════════════════════════ -->
+      <div *ngIf="tabActiva === 'proximas'" class="tab-panel">
 
-          <!-- Selector especialidad -->
-          <div class="card">
-            <h2 class="card__title">Buscar Especialista</h2>
-            <div class="form-field">
-              <label class="form-label">Especialidad</label>
-              <div class="select-wrapper">
-                <select
-                  class="form-select"
-                  (change)="onEspecialidadChange(+$any($event.target).value)">
-                  <option value="" disabled selected>-- Selecciona una especialidad --</option>
-                  <option
-                    *ngFor="let esp of especialidades"
-                    [value]="esp.idEspecialidad">
-                    {{ esp.nombreEspecialidad }}
-                  </option>
-                </select>
-                <span class="material-symbols-outlined select-wrapper__icon">expand_more</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Lista de profesionales -->
-          <div class="prof-list">
-
-            <div *ngIf="cargandoProfesionales" class="state-message state-message--center">
-              <div class="spinner"></div>
-              <span class="state-message__text">Buscando profesionales...</span>
-            </div>
-
-            <div
-              *ngIf="!cargandoProfesionales && especialidades.length > 0 && profesionales.length === 0 && !especialidadSeleccionada"
-              class="empty-state">
-              <span class="material-symbols-outlined empty-state__icon">person_search</span>
-              <p class="empty-state__text">Selecciona una especialidad para ver los profesionales disponibles.</p>
-            </div>
-
-            <div
-              *ngIf="!cargandoProfesionales && especialidadSeleccionada && profesionales.length === 0"
-              class="empty-state">
-              <span class="material-symbols-outlined empty-state__icon">person_off</span>
-              <p class="empty-state__text">No hay profesionales disponibles para esta especialidad.</p>
-            </div>
-
-            <div
-              *ngFor="let prof of profesionales"
-              class="prof-card"
-              [class.prof-card--selected]="profesionalSeleccionado?.idProfesional === prof.idProfesional">
-
-              <div class="prof-card__body">
-                <div class="avatar avatar--lg">
-                  {{ prof.usuario.pnombreUsuario.charAt(0) }}{{ prof.usuario.apaternoUsuario.charAt(0) }}
-                </div>
-                <div class="prof-card__info">
-                  <h3 class="prof-card__name">
-                    {{ prof.usuario.pnombreUsuario }}
-                    {{ prof.usuario.snombreUsuario }}
-                    {{ prof.usuario.apaternoUsuario }}
-                    {{ prof.usuario.amaternornoUsuario }}
-                  </h3>
-                  <p class="prof-card__email">{{ prof.usuario.emailUsuario }}</p>
-                  <p class="prof-card__rut">{{ prof.usuario.rut }}</p>
-                  <p class="prof-card__registro">Registro: {{ prof.numeroRegistroProfesional }}</p>
-                  <p class="prof-card__especialidad">{{ prof.especialidad.nombreEspecialidad }}</p>
-                </div>
-              </div>
-
-              <button
-                class="btn"
-                [class.btn--primary]="profesionalSeleccionado?.idProfesional === prof.idProfesional"
-                [class.btn--secondary]="profesionalSeleccionado?.idProfesional !== prof.idProfesional"
-                (click)="seleccionarProfesional(prof)">
-                {{
-                  profesionalSeleccionado?.idProfesional === prof.idProfesional
-                    ? 'Seleccionado ✓'
-                    : 'Ver disponibilidad'
-                }}
-              </button>
-
-            </div>
-          </div>
+        <div *ngIf="cargandoCitas" class="state-message state-message--center">
+          <div class="spinner"></div>
+          <span class="state-message__text">Cargando tus citas...</span>
         </div>
 
-        <!-- ── COLUMNA DERECHA: Calendario + Horarios ── -->
-        <div class="col-right card">
+        <div *ngIf="!cargandoCitas && citasProximas.length === 0" class="empty-state empty-state--center">
+          <span class="material-symbols-outlined empty-state__icon">event_available</span>
+          <p class="empty-state__text">No tienes citas próximas.</p>
+          <button class="btn btn--primary" (click)="cambiarTab('agendar')">Agendar una cita</button>
+        </div>
 
-          <div class="calendar__header">
-            <h2 class="card__title">Agenda Semanal</h2>
-            <span class="calendar__mes-label">{{ mesAnioLabel }}</span>
-          </div>
-
-          <div class="calendar__days">
-            <button
-              *ngFor="let dia of diasSemana"
-              class="day-btn"
-              [class.day-btn--selected]="dia.seleccionado"
-              [class.day-btn--disabled]="!dia.activo"
-              [disabled]="!dia.activo"
-              (click)="seleccionarDia(dia)">
-              <span class="day-btn__label">{{ dia.label }}</span>
-              <span class="day-btn__num">{{ dia.numero }}</span>
-            </button>
-          </div>
-
-          <hr class="divider" />
-
-          <h3 class="horarios__title">
-            <span class="material-symbols-outlined">schedule</span>
-            Horarios disponibles para el {{ labelDiaSeleccionado }}
-          </h3>
-
-          <div *ngIf="!profesionalSeleccionado && !cargandoHorarios" class="empty-state empty-state--center">
-            <span class="material-symbols-outlined empty-state__icon">calendar_clock</span>
-            <p class="empty-state__text">Selecciona un profesional para ver los horarios disponibles.</p>
-          </div>
-
-          <div *ngIf="cargandoHorarios" class="state-message state-message--center">
-            <div class="spinner"></div>
-            <span class="state-message__text">Cargando horarios...</span>
-          </div>
-
+        <div *ngIf="!cargandoCitas && citasProximas.length > 0" class="citas-grid">
           <div
-            *ngIf="profesionalSeleccionado && !cargandoHorarios && horarios.length > 0"
-            class="horarios__grid">
-            <button
-              *ngFor="let hora of horarios"
-              class="hora-btn"
-              [class.hora-btn--selected]="horaSeleccionada === hora"
-              (click)="openModal(hora)">
-              {{ hora }}
-            </button>
-          </div>
+            *ngFor="let cita of citasProximas"
+            class="cita-card">
 
-          <div
-            *ngIf="profesionalSeleccionado && !cargandoHorarios && horarios.length === 0"
-            class="empty-state empty-state--center">
-            <span class="material-symbols-outlined empty-state__icon">event_busy</span>
-            <p class="empty-state__text">No hay horarios disponibles para este día.</p>
-          </div>
-
-          <div class="info-banner">
-            <span class="material-symbols-outlined info-banner__icon">info</span>
-            <div>
-              <h4 class="info-banner__title">Información Importante</h4>
-              <p class="info-banner__text">
-                Favor de presentarse 15 minutos antes de su cita. Si necesita cancelar, por favor hágalo con al menos 24 horas de anticipación.
-              </p>
+            <!-- Encabezado: fecha + estado -->
+            <div class="cita-card__header" [ngClass]="getEstadoHeaderClass(cita.estadoCitaIdEstadoCita)">
+              <div class="cita-card__fecha-wrap">
+                <div class="cita-card__fecha-icon">
+                  <span class="material-symbols-outlined">calendar_month</span>
+                </div>
+                <div>
+                  <p class="cita-card__fecha-dia">{{ formatearFechaDia(cita.fechaHora) }}</p>
+                  <p class="cita-card__hora">{{ formatearHora(cita.fechaHora) }}</p>
+                </div>
+              </div>
+              <span class="estado-badge" [ngClass]="getEstadoBadgeClass(cita.estadoCitaIdEstadoCita)">
+                {{ getEstadoLabel(cita.estadoCitaIdEstadoCita) }}
+              </span>
             </div>
-          </div>
 
+            <!-- Cuerpo: info del profesional y motivo -->
+            <div class="cita-card__body">
+              <div class="cita-card__profesional">
+                <div class="avatar avatar--md">
+                  {{ getInicialProfesional(cita) }}
+                </div>
+                <div class="cita-card__prof-info">
+                  <h4 class="cita-card__prof-nombre">{{ getNombreProfesional(cita) }}</h4>
+                  <p class="cita-card__prof-esp">{{ getEspecialidadProfesional(cita) }}</p>
+                </div>
+              </div>
+
+              <div class="cita-card__detalles">
+                <p class="cita-card__detalle-item">
+                  <span class="material-symbols-outlined">medical_information</span>
+                  Motivo: {{ getMotivoCita(cita) }}
+                </p>
+              </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="cita-card__actions">
+              <button
+                class="btn btn--outline"
+                (click)="abrirModalReprogramar(cita)">
+                Reprogramar
+              </button>
+              <button
+                class="btn btn--danger-ghost"
+                (click)="abrirModalCancelar(cita)">
+                Cancelar Cita
+              </button>
+            </div>
+
+          </div>
         </div>
       </div>
+
+      <!-- ══════════════════════════════════════════
+           PESTAÑA: HISTORIAL DE CITAS
+      ══════════════════════════════════════════ -->
+      <div *ngIf="tabActiva === 'historial'" class="tab-panel">
+
+        <div *ngIf="cargandoHistorial" class="state-message state-message--center">
+          <div class="spinner"></div>
+          <span class="state-message__text">Cargando historial...</span>
+        </div>
+
+        <div *ngIf="!cargandoHistorial && citasHistorial.length === 0" class="empty-state empty-state--center">
+          <span class="material-symbols-outlined empty-state__icon">history_edu</span>
+          <p class="empty-state__text">No tienes citas en tu historial aún.</p>
+        </div>
+
+        <div *ngIf="!cargandoHistorial && citasHistorial.length > 0" class="historial-table-wrap">
+          <table class="historial-table">
+            <thead>
+              <tr>
+                <th>Doctor / Especialidad</th>
+                <th>Fecha y hora</th>
+                <th>Motivo</th>
+                <th>Estado</th>
+                <th class="text-right">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cita of citasHistorial">
+                <td>
+                  <div class="historial-prof">
+                    <div class="avatar avatar--sm">{{ getInicialProfesional(cita) }}</div>
+                    <div>
+                      <p class="historial-prof__nombre">{{ getNombreProfesional(cita) }}</p>
+                      <p class="historial-prof__esp">{{ getEspecialidadProfesional(cita) }}</p>
+                    </div>
+                  </div>
+                </td>
+                <td class="historial-fecha">{{ formatearFechaCompleta(cita.fechaHora) }}</td>
+                <td class="historial-motivo">{{ getMotivoCita(cita) }}</td>
+                <td>
+                  <span class="estado-badge" [ngClass]="getEstadoBadgeClass(cita.estadoCitaIdEstadoCita)">
+                    {{ getEstadoLabel(cita.estadoCitaIdEstadoCita) }}
+                  </span>
+                </td>
+                <td class="text-right">
+                  <button
+                    *ngIf="cita.estadoCitaIdEstadoCita === 3"
+                    class="btn-link"
+                    (click)="verInforme(cita)">
+                    Ver Informe
+                  </button>
+                  <button
+                    *ngIf="cita.estadoCitaIdEstadoCita === 4"
+                    class="btn-link"
+                    (click)="reagendarCita(cita)">
+                    Reagendar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ══════════════════════════════════════════
+           PESTAÑA: AGENDAR NUEVA CITA (flujo original)
+      ══════════════════════════════════════════ -->
+      <div *ngIf="tabActiva === 'agendar'" class="tab-panel">
+
+        <div class="layout-grid">
+
+          <!-- ── COLUMNA IZQUIERDA: Filtros + Lista doctores ── -->
+          <div class="col-left">
+
+            <div class="card">
+              <h2 class="card__title">Buscar Especialista</h2>
+              <div class="form-field">
+                <label class="form-label">Especialidad</label>
+                <div class="select-wrapper">
+                  <select
+                    class="form-select"
+                    (change)="onEspecialidadChange(+$any($event.target).value)">
+                    <option value="" disabled selected>-- Selecciona una especialidad --</option>
+                    <option
+                      *ngFor="let esp of especialidades"
+                      [value]="esp.idEspecialidad">
+                      {{ esp.nombreEspecialidad }}
+                    </option>
+                  </select>
+                  <span class="material-symbols-outlined select-wrapper__icon">expand_more</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="prof-list">
+
+              <div *ngIf="cargandoProfesionales" class="state-message state-message--center">
+                <div class="spinner"></div>
+                <span class="state-message__text">Buscando profesionales...</span>
+              </div>
+
+              <div
+                *ngIf="!cargandoProfesionales && especialidades.length > 0 && profesionales.length === 0 && !especialidadSeleccionada"
+                class="empty-state">
+                <span class="material-symbols-outlined empty-state__icon">person_search</span>
+                <p class="empty-state__text">Selecciona una especialidad para ver los profesionales disponibles.</p>
+              </div>
+
+              <div
+                *ngIf="!cargandoProfesionales && especialidadSeleccionada && profesionales.length === 0"
+                class="empty-state">
+                <span class="material-symbols-outlined empty-state__icon">person_off</span>
+                <p class="empty-state__text">No hay profesionales disponibles para esta especialidad.</p>
+              </div>
+
+              <div
+                *ngFor="let prof of profesionales"
+                class="prof-card"
+                [class.prof-card--selected]="profesionalSeleccionado?.idProfesional === prof.idProfesional">
+
+                <div class="prof-card__body">
+                  <div class="avatar avatar--lg">
+                    {{ prof.usuario.pnombreUsuario.charAt(0) }}{{ prof.usuario.apaternoUsuario.charAt(0) }}
+                  </div>
+                  <div class="prof-card__info">
+                    <h3 class="prof-card__name">
+                      {{ prof.usuario.pnombreUsuario }}
+                      {{ prof.usuario.snombreUsuario }}
+                      {{ prof.usuario.apaternoUsuario }}
+                      {{ prof.usuario.amaternornoUsuario }}
+                    </h3>
+                    <p class="prof-card__email">{{ prof.usuario.emailUsuario }}</p>
+                    <p class="prof-card__rut">{{ prof.usuario.rut }}</p>
+                    <p class="prof-card__registro">Registro: {{ prof.numeroRegistroProfesional }}</p>
+                    <p class="prof-card__especialidad">{{ prof.especialidad.nombreEspecialidad }}</p>
+                  </div>
+                </div>
+
+                <button
+                  class="btn"
+                  [class.btn--primary]="profesionalSeleccionado?.idProfesional === prof.idProfesional"
+                  [class.btn--secondary]="profesionalSeleccionado?.idProfesional !== prof.idProfesional"
+                  (click)="seleccionarProfesional(prof)">
+                  {{
+                    profesionalSeleccionado?.idProfesional === prof.idProfesional
+                      ? 'Seleccionado ✓'
+                      : 'Ver disponibilidad'
+                  }}
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- ── COLUMNA DERECHA: Calendario + Horarios ── -->
+          <div class="col-right card">
+
+            <div class="calendar__header">
+              <h2 class="card__title">Agenda Semanal</h2>
+              <span class="calendar__mes-label">{{ mesAnioLabel }}</span>
+            </div>
+
+            <div class="calendar__days">
+              <button
+                *ngFor="let dia of diasSemana"
+                class="day-btn"
+                [class.day-btn--selected]="dia.seleccionado"
+                [class.day-btn--disabled]="!dia.activo"
+                [disabled]="!dia.activo"
+                (click)="seleccionarDia(dia)">
+                <span class="day-btn__label">{{ dia.label }}</span>
+                <span class="day-btn__num">{{ dia.numero }}</span>
+              </button>
+            </div>
+
+            <hr class="divider" />
+
+            <h3 class="horarios__title">
+              <span class="material-symbols-outlined">schedule</span>
+              Horarios disponibles para el {{ labelDiaSeleccionado }}
+            </h3>
+
+            <div *ngIf="!profesionalSeleccionado && !cargandoHorarios" class="empty-state empty-state--center">
+              <span class="material-symbols-outlined empty-state__icon">calendar_clock</span>
+              <p class="empty-state__text">Selecciona un profesional para ver los horarios disponibles.</p>
+            </div>
+
+            <div *ngIf="cargandoHorarios" class="state-message state-message--center">
+              <div class="spinner"></div>
+              <span class="state-message__text">Cargando horarios...</span>
+            </div>
+
+            <div
+              *ngIf="profesionalSeleccionado && !cargandoHorarios && horarios.length > 0"
+              class="horarios__grid">
+              <button
+                *ngFor="let hora of horarios"
+                class="hora-btn"
+                [class.hora-btn--selected]="horaSeleccionada === hora"
+                (click)="openModal(hora)">
+                {{ hora }}
+              </button>
+            </div>
+
+            <div
+              *ngIf="profesionalSeleccionado && !cargandoHorarios && horarios.length === 0"
+              class="empty-state empty-state--center">
+              <span class="material-symbols-outlined empty-state__icon">event_busy</span>
+              <p class="empty-state__text">No hay horarios disponibles para este día.</p>
+            </div>
+
+            <div class="info-banner">
+              <span class="material-symbols-outlined info-banner__icon">info</span>
+              <div>
+                <h4 class="info-banner__title">Información Importante</h4>
+                <p class="info-banner__text">
+                  Favor de presentarse 15 minutos antes de su cita. Si necesita cancelar, por favor hágalo con al menos 24 horas de anticipación.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
 </app-shared-layout>
 
 
-<!-- ── MODAL CONFIRMACIÓN (fuera del layout, ocupa toda la ventana) ── -->
+<!-- ══════════════════════════════════════════
+     MODAL: CONFIRMAR RESERVA (flujo original)
+══════════════════════════════════════════ -->
 <div *ngIf="mostrarModal" class="modal-overlay">
-
   <div class="modal-backdrop" (click)="cerrarModal()"></div>
-
   <div class="modal">
     <div class="modal__body">
 
@@ -197,7 +362,6 @@
       </div>
 
       <div *ngIf="!exitoReserva" class="modal__form">
-
         <div class="resumen">
           <div class="resumen__row">
             <span class="material-symbols-outlined resumen__icon">person</span>
@@ -238,8 +402,128 @@
             Cancelar
           </button>
         </div>
-
       </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     MODAL: CANCELAR CITA
+══════════════════════════════════════════ -->
+<div *ngIf="mostrarModalCancelar" class="modal-overlay">
+  <div class="modal-backdrop" (click)="cerrarModalCancelar()"></div>
+  <div class="modal modal--sm">
+    <div class="modal__body modal__body--center">
+
+      <div class="modal-warning-icon">
+        <span class="material-symbols-outlined">warning</span>
+      </div>
+
+      <h3 class="modal__title">¿Cancelar Cita?</h3>
+      <p class="modal-cancel__desc">
+        Esta acción no se puede deshacer. ¿Estás seguro que deseas cancelar tu cita del
+        <strong>{{ citaSeleccionada ? formatearFechaCompleta(citaSeleccionada.fechaHora) : '' }}</strong>?
+      </p>
+
+      <div *ngIf="errorCancelar" class="alert alert--error">
+        <span class="material-symbols-outlined alert__icon">error</span>
+        {{ mensajeErrorCancelar }}
+      </div>
+
+      <div class="modal__actions">
+        <button class="btn btn--danger btn--full" (click)="confirmarCancelacion()">
+          Sí, Cancelar Cita
+        </button>
+        <button class="btn btn--ghost btn--full" (click)="cerrarModalCancelar()">
+          Mantener Cita
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     MODAL: REPROGRAMAR CITA
+══════════════════════════════════════════ -->
+<div *ngIf="mostrarModalReprogramar" class="modal-overlay">
+  <div class="modal-backdrop" (click)="cerrarModalReprogramar()"></div>
+  <div class="modal">
+    <div class="modal__body">
+
+      <div class="modal__header">
+        <h2 class="modal__title">Reprogramar Cita</h2>
+        <button class="modal__close" (click)="cerrarModalReprogramar()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Info de la cita actual -->
+      <div class="resumen" style="margin-bottom: 1.5rem;">
+        <div class="resumen__row">
+          <span class="material-symbols-outlined resumen__icon">event</span>
+          <span class="resumen__value">Fecha actual: <strong>{{ citaSeleccionada ? formatearFechaCompleta(citaSeleccionada.fechaHora) : '' }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Selector de nueva fecha -->
+      <div class="form-field" style="margin-bottom: 1.5rem;">
+        <label class="form-label">Selecciona la nueva fecha</label>
+        <div class="calendar__days">
+          <button
+            *ngFor="let dia of diasSemana"
+            class="day-btn"
+            [class.day-btn--selected]="dia.fecha === fechaReprogramar"
+            [class.day-btn--disabled]="!dia.activo"
+            [disabled]="!dia.activo"
+            (click)="seleccionarFechaReprogramar(dia)">
+            <span class="day-btn__label">{{ dia.label }}</span>
+            <span class="day-btn__num">{{ dia.numero }}</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Horarios disponibles para reprogramar -->
+      <div *ngIf="cargandoHorariosReprogramar" class="state-message state-message--center">
+        <div class="spinner"></div>
+        <span class="state-message__text">Cargando horarios...</span>
+      </div>
+
+      <div *ngIf="!cargandoHorariosReprogramar && horariosReprogramar.length > 0">
+        <label class="form-label" style="margin-bottom: 0.75rem; display: block;">Horarios disponibles</label>
+        <div class="horarios__grid">
+          <button
+            *ngFor="let hora of horariosReprogramar"
+            class="hora-btn"
+            [class.hora-btn--selected]="horaReprogramar === hora"
+            (click)="horaReprogramar = hora">
+            {{ hora }}
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="!cargandoHorariosReprogramar && fechaReprogramar && horariosReprogramar.length === 0" class="empty-state empty-state--center">
+        <span class="material-symbols-outlined empty-state__icon">event_busy</span>
+        <p class="empty-state__text">No hay horarios disponibles para este día.</p>
+      </div>
+
+      <div *ngIf="errorReprogramar" class="alert alert--error" style="margin-top: 1rem;">
+        <span class="material-symbols-outlined alert__icon">error</span>
+        {{ mensajeErrorReprogramar }}
+      </div>
+
+      <div class="modal__actions" style="margin-top: 1.5rem;">
+        <button class="btn btn--primary btn--full btn--lg" (click)="confirmarReprogramacion()">
+          Confirmar Cambio
+        </button>
+        <button class="btn btn--ghost btn--full" (click)="cerrarModalReprogramar()">
+          Cancelar
+        </button>
+      </div>
+
     </div>
   </div>
 </div>
