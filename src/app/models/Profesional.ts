@@ -1,6 +1,9 @@
+import { Especialidad } from "./Especialidad";
+import { Usuario } from "./Usuario";
+
 export interface Profesional {
   idProfesional: number;
   numeroRegistroProfesional: string;
-  idUsuario: number;
-  idEspecialidad: number;
+  usuario: Usuario;
+  especialidad: Especialidad;
 }

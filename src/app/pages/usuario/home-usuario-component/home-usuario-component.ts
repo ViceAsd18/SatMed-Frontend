@@ -7,11 +7,12 @@ import { AtencionMedica } from '../../../models/AtencionMedica';
 import { Tratamiento } from '../../../models/Tratamiento';
 import { DashboardService } from '../../../services/DashboardService/dashboard-service';
 import { Cita } from '../../../models/cita';
+import { SharedLayoutComponent } from '../../../components/shared-layout-component/shared-layout-component';
 
 @Component({
   selector: 'app-home-usuario',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, SharedLayoutComponent],
   templateUrl: './home-usuario-component.html',
   styleUrls: ['./home-usuario-component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -99,7 +100,7 @@ export class HomeUsuarioComponent implements OnInit, OnDestroy {
     const confirmar = confirm('¿Estás seguro que deseas cancelar esta cita?');
     if (!confirmar) return;
 
-    this.dashboardService.cancelarCita(this.proximaCita.id_cita)
+    this.dashboardService.cancelarCita(this.proximaCita.id_cita!)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {

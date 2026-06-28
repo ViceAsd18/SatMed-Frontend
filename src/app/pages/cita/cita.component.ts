@@ -72,7 +72,7 @@ export class CitaComponent implements OnInit {
   }
 
   editarCita(cita: Cita): void {
-    this.idCitaEnEdicion.set(cita.id_cita);
+    this.idCitaEnEdicion.set(cita.id_cita!);
     this.formularioCita.patchValue({
       ...cita,
       fecha_hora: this.normalizarFechaHoraParaInput(cita.fechaHora)
@@ -158,7 +158,7 @@ export class CitaComponent implements OnInit {
     this.mensajeError.set(null);
     this.guardando.set(true);
     this.citaService
-      .delete(cita.id_cita)
+      .delete(cita.id_cita!)
       .pipe(finalize(() => this.guardando.set(false)))
       .subscribe({
         next: () => {

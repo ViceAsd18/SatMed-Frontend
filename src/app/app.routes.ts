@@ -6,6 +6,7 @@ import { CitaComponent } from './pages/cita/cita.component';
 import { RegistroComponent } from './pages/registro-component/registro-component';
 import { AdminComponent } from './pages/admin/admin';
 import { LoginComponent } from './pages/login-component/login-component';
+import { AgendarCitaComponent } from './pages/usuario/agendar-cita-component/agendar-cita-component';
 
 export const routes: Routes = [
 
@@ -13,6 +14,10 @@ export const routes: Routes = [
         path : '',
         component : HomeUsuarioComponent
     },
+
+    { path: 'agendar-cita', component: AgendarCitaComponent },
+
+
     {
         path: 'pacientes',
         component: PacienteComponent

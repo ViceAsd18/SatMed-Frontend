@@ -1,5 +1,5 @@
 export interface Cita {
-  id_cita: number;
+  id_cita?: number;
   fechaHora: string;
   motivoCita: string;
   estadoCitaIdEstadoCita: number;

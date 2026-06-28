@@ -1,69 +1,7 @@
-<div
-  *ngIf="sidebarOpen"
-  class="sidebar-overlay"
-  (click)="closeSidebar()">
-</div>
+<!-- home.component.html
+     El sidebar, topbar, footer y mobile-nav los provee SharedLayoutComponent. -->
 
-<aside class="sidebar" [class.sidebar--open]="sidebarOpen">
-  <div class="sidebar__logo">
-    <h1>SAT-MED</h1>
-  </div>
-
-  <nav class="sidebar__nav">
-    <a class="nav-item nav-item--active" href="#">
-      <span class="material-symbols-outlined nav-item__icon">home</span>
-      <span>Inicio</span>
-    </a>
-    <a class="nav-item" routerLink="/citas">
-      <span class="material-symbols-outlined nav-item__icon">calendar_today</span>
-      <span>Mis Citas</span>
-    </a>
-    <a class="nav-item" routerLink="/historial">
-      <span class="material-symbols-outlined nav-item__icon">history_edu</span>
-      <span>Historial Clínico</span>
-    </a>
-    <a class="nav-item" routerLink="/mensajes">
-      <span class="material-symbols-outlined nav-item__icon">mail</span>
-      <span>Mensajería</span>
-    </a>
-  </nav>
-
-  <div class="sidebar__footer">
-    <a class="nav-item" href="#">
-      <span class="material-symbols-outlined nav-item__icon">help</span>
-      <span>Ayuda</span>
-    </a>
-    <a class="nav-item nav-item--danger" href="#">
-      <span class="material-symbols-outlined nav-item__icon">logout</span>
-      <span>Cerrar Sesión</span>
-    </a>
-  </div>
-</aside>
-
-<div class="main-wrapper">
-
-  <header class="topbar">
-    <button class="topbar__menu-btn" (click)="toggleSidebar()">
-      <span class="material-symbols-outlined">menu</span>
-    </button>
-
-    <div class="topbar__right">
-      <button class="topbar__notif-btn">
-        <span class="material-symbols-outlined">notifications</span>
-        <span class="notif-dot"></span>
-      </button>
-
-      <div class="topbar__user">
-        <div class="topbar__user-info">
-          <p class="topbar__user-name">{{ nombrePaciente }}</p>
-          <p class="topbar__user-id">Paciente {{ numeroPaciente }}</p>
-        </div>
-        <div class="topbar__avatar">
-          {{ nombrePaciente.charAt(0) }}
-        </div>
-      </div>
-    </div>
-  </header>
+<app-shared-layout>
 
   <main class="dashboard">
 
@@ -87,8 +25,10 @@
 
       <div class="dashboard__grid">
 
+        <!-- ── Columna principal ── -->
         <div class="dashboard__main">
 
+          <!-- Próxima cita -->
           <div class="card card--featured" *ngIf="proximaCita; else sinCita">
             <div class="card__header">
               <div>
@@ -146,6 +86,7 @@
             </div>
           </ng-template>
 
+          <!-- Tratamiento activo -->
           <div class="card card--treatment" *ngIf="tratamientoActivo; else sinTratamiento">
             <div class="treatment__header">
               <div class="treatment__icon-wrap">
@@ -186,8 +127,10 @@
 
         </div>
 
+        <!-- ── Columna lateral ── -->
         <div class="dashboard__sidebar">
 
+          <!-- Resumen de citas -->
           <div class="card card--summary">
             <div class="summary__icon-wrap">
               <span class="material-symbols-outlined">event_note</span>
@@ -203,6 +146,7 @@
             </button>
           </div>
 
+          <!-- Última atención -->
           <div class="card" *ngIf="ultimaAtencion; else sinAtencion">
             <div class="last-attention__header">
               <div class="treatment__icon-wrap treatment__icon-wrap--tertiary">
@@ -230,6 +174,7 @@
             </div>
           </ng-template>
 
+          <!-- Consejo de salud -->
           <div class="card card--tip">
             <span class="material-symbols-outlined tip__icon">lightbulb</span>
             <h4 class="tip__title">Consejo de Salud</h4>
@@ -243,34 +188,4 @@
     </ng-container>
   </main>
 
-  <footer class="footer">
-    <div class="footer__inner">
-      <span class="footer__brand">SAT-MED</span>
-      <span class="footer__copy">© 2025 Todos los derechos reservados.</span>
-      <nav class="footer__links">
-        <a href="#">Privacidad</a>
-        <a href="#">Términos</a>
-        <a href="#">Contacto</a>
-      </nav>
-    </div>
-  </footer>
-</div>
-
-<nav class="mobile-nav">
-  <button class="mobile-nav__item mobile-nav__item--active">
-    <span class="material-symbols-outlined">home</span>
-    <span>Inicio</span>
-  </button>
-  <button class="mobile-nav__item">
-    <span class="material-symbols-outlined">calendar_today</span>
-    <span>Citas</span>
-  </button>
-  <button class="mobile-nav__item">
-    <span class="material-symbols-outlined">history_edu</span>
-    <span>Historial</span>
-  </button>
-  <button class="mobile-nav__item">
-    <span class="material-symbols-outlined">person</span>
-    <span>Perfil</span>
-  </button>
-</nav>
+</app-shared-layout>

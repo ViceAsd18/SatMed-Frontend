@@ -1,0 +1,245 @@
+<!-- agendar-cita.component.html
+     El sidebar, topbar, footer y mobile-nav los provee SharedLayoutComponent.
+     Aquí sólo va el contenido de la página. -->
+
+<app-shared-layout>
+
+  <div class="page-content">
+    <div class="page-wrapper">
+
+      <!-- HEADER DE PÁGINA -->
+      <header class="page-header">
+        <h1 class="page-title">Agendar Nueva Cita</h1>
+        <p class="page-subtitle">Selecciona un especialista y el horario que mejor te convenga.</p>
+      </header>
+
+      <div class="layout-grid">
+
+        <!-- ── COLUMNA IZQUIERDA: Filtros + Lista doctores ── -->
+        <div class="col-left">
+
+          <!-- Selector especialidad -->
+          <div class="card">
+            <h2 class="card__title">Buscar Especialista</h2>
+            <div class="form-field">
+              <label class="form-label">Especialidad</label>
+              <div class="select-wrapper">
+                <select
+                  class="form-select"
+                  (change)="onEspecialidadChange(+$any($event.target).value)">
+                  <option value="" disabled selected>-- Selecciona una especialidad --</option>
+                  <option
+                    *ngFor="let esp of especialidades"
+                    [value]="esp.idEspecialidad">
+                    {{ esp.nombreEspecialidad }}
+                  </option>
+                </select>
+                <span class="material-symbols-outlined select-wrapper__icon">expand_more</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lista de profesionales -->
+          <div class="prof-list">
+
+            <div *ngIf="cargandoProfesionales" class="state-message state-message--center">
+              <div class="spinner"></div>
+              <span class="state-message__text">Buscando profesionales...</span>
+            </div>
+
+            <div
+              *ngIf="!cargandoProfesionales && especialidades.length > 0 && profesionales.length === 0 && !especialidadSeleccionada"
+              class="empty-state">
+              <span class="material-symbols-outlined empty-state__icon">person_search</span>
+              <p class="empty-state__text">Selecciona una especialidad para ver los profesionales disponibles.</p>
+            </div>
+
+            <div
+              *ngIf="!cargandoProfesionales && especialidadSeleccionada && profesionales.length === 0"
+              class="empty-state">
+              <span class="material-symbols-outlined empty-state__icon">person_off</span>
+              <p class="empty-state__text">No hay profesionales disponibles para esta especialidad.</p>
+            </div>
+
+            <div
+              *ngFor="let prof of profesionales"
+              class="prof-card"
+              [class.prof-card--selected]="profesionalSeleccionado?.idProfesional === prof.idProfesional">
+
+              <div class="prof-card__body">
+                <div class="avatar avatar--lg">
+                  {{ prof.usuario.pnombreUsuario.charAt(0) }}{{ prof.usuario.apaternoUsuario.charAt(0) }}
+                </div>
+                <div class="prof-card__info">
+                  <h3 class="prof-card__name">
+                    {{ prof.usuario.pnombreUsuario }}
+                    {{ prof.usuario.snombreUsuario }}
+                    {{ prof.usuario.apaternoUsuario }}
+                    {{ prof.usuario.amaternornoUsuario }}
+                  </h3>
+                  <p class="prof-card__email">{{ prof.usuario.emailUsuario }}</p>
+                  <p class="prof-card__rut">{{ prof.usuario.rut }}</p>
+                  <p class="prof-card__registro">Registro: {{ prof.numeroRegistroProfesional }}</p>
+                  <p class="prof-card__especialidad">{{ prof.especialidad.nombreEspecialidad }}</p>
+                </div>
+              </div>
+
+              <button
+                class="btn"
+                [class.btn--primary]="profesionalSeleccionado?.idProfesional === prof.idProfesional"
+                [class.btn--secondary]="profesionalSeleccionado?.idProfesional !== prof.idProfesional"
+                (click)="seleccionarProfesional(prof)">
+                {{
+                  profesionalSeleccionado?.idProfesional === prof.idProfesional
+                    ? 'Seleccionado ✓'
+                    : 'Ver disponibilidad'
+                }}
+              </button>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- ── COLUMNA DERECHA: Calendario + Horarios ── -->
+        <div class="col-right card">
+
+          <div class="calendar__header">
+            <h2 class="card__title">Agenda Semanal</h2>
+            <span class="calendar__mes-label">{{ mesAnioLabel }}</span>
+          </div>
+
+          <div class="calendar__days">
+            <button
+              *ngFor="let dia of diasSemana"
+              class="day-btn"
+              [class.day-btn--selected]="dia.seleccionado"
+              [class.day-btn--disabled]="!dia.activo"
+              [disabled]="!dia.activo"
+              (click)="seleccionarDia(dia)">
+              <span class="day-btn__label">{{ dia.label }}</span>
+              <span class="day-btn__num">{{ dia.numero }}</span>
+            </button>
+          </div>
+
+          <hr class="divider" />
+
+          <h3 class="horarios__title">
+            <span class="material-symbols-outlined">schedule</span>
+            Horarios disponibles para el {{ labelDiaSeleccionado }}
+          </h3>
+
+          <div *ngIf="!profesionalSeleccionado && !cargandoHorarios" class="empty-state empty-state--center">
+            <span class="material-symbols-outlined empty-state__icon">calendar_clock</span>
+            <p class="empty-state__text">Selecciona un profesional para ver los horarios disponibles.</p>
+          </div>
+
+          <div *ngIf="cargandoHorarios" class="state-message state-message--center">
+            <div class="spinner"></div>
+            <span class="state-message__text">Cargando horarios...</span>
+          </div>
+
+          <div
+            *ngIf="profesionalSeleccionado && !cargandoHorarios && horarios.length > 0"
+            class="horarios__grid">
+            <button
+              *ngFor="let hora of horarios"
+              class="hora-btn"
+              [class.hora-btn--selected]="horaSeleccionada === hora"
+              (click)="openModal(hora)">
+              {{ hora }}
+            </button>
+          </div>
+
+          <div
+            *ngIf="profesionalSeleccionado && !cargandoHorarios && horarios.length === 0"
+            class="empty-state empty-state--center">
+            <span class="material-symbols-outlined empty-state__icon">event_busy</span>
+            <p class="empty-state__text">No hay horarios disponibles para este día.</p>
+          </div>
+
+          <div class="info-banner">
+            <span class="material-symbols-outlined info-banner__icon">info</span>
+            <div>
+              <h4 class="info-banner__title">Información Importante</h4>
+              <p class="info-banner__text">
+                Favor de presentarse 15 minutos antes de su cita. Si necesita cancelar, por favor hágalo con al menos 24 horas de anticipación.
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</app-shared-layout>
+
+
+<!-- ── MODAL CONFIRMACIÓN (fuera del layout, ocupa toda la ventana) ── -->
+<div *ngIf="mostrarModal" class="modal-overlay">
+
+  <div class="modal-backdrop" (click)="cerrarModal()"></div>
+
+  <div class="modal">
+    <div class="modal__body">
+
+      <div class="modal__header">
+        <h2 class="modal__title">Confirmar Cita</h2>
+        <button class="modal__close" (click)="cerrarModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div *ngIf="exitoReserva" class="modal__success">
+        <span class="material-symbols-outlined modal__success-icon">check_circle</span>
+        <h3 class="modal__success-title">¡Cita reservada!</h3>
+        <p class="modal__success-text">Tu cita fue agendada correctamente.</p>
+      </div>
+
+      <div *ngIf="!exitoReserva" class="modal__form">
+
+        <div class="resumen">
+          <div class="resumen__row">
+            <span class="material-symbols-outlined resumen__icon">person</span>
+            <span class="resumen__value resumen__value--bold">{{ nombreProfesionalSeleccionado }}</span>
+          </div>
+          <div class="resumen__row">
+            <span class="material-symbols-outlined resumen__icon">event</span>
+            <span class="resumen__value">{{ fechaLegible }}</span>
+          </div>
+          <div class="resumen__row">
+            <span class="material-symbols-outlined resumen__icon">schedule</span>
+            <span class="resumen__value resumen__value--bold">{{ horaSeleccionada }}</span>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">
+            Motivo de la consulta <span class="form-required">*</span>
+          </label>
+          <textarea
+            rows="3"
+            placeholder="Breve descripción de su malestar o motivo de visita..."
+            class="form-textarea"
+            [(ngModel)]="nuevaCita.motivoCita">
+          </textarea>
+        </div>
+
+        <div *ngIf="errorReserva" class="alert alert--error">
+          <span class="material-symbols-outlined alert__icon">error</span>
+          {{ mensajeError }}
+        </div>
+
+        <div class="modal__actions">
+          <button class="btn btn--primary btn--full btn--lg" (click)="confirmarReserva()">
+            Confirmar y Reservar Cita
+          </button>
+          <button class="btn btn--ghost btn--full" (click)="cerrarModal()">
+            Cancelar
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

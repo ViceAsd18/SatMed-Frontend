@@ -1,0 +1,434 @@
+/* ============================================================
+   IMPORTS
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap');
+
+/* ============================================================
+   DESIGN TOKENS — fuente única de verdad para todo el sistema
+   Cada vista importa SÓLO su propio .css; estos tokens se
+   heredan automáticamente vía :host del layout compartido.
+   ============================================================ */
+:host {
+  /* ── Colores principales ── */
+  --primary:             #004ac6;
+  --primary-container:   #2563eb;
+  --on-primary:          #ffffff;
+
+  --secondary:           #006c49;
+  --secondary-container: #6cf8bb;
+
+  --tertiary:            #3e3fcc;
+  --tertiary-container:  #585be6;
+
+  --error:               #ba1a1a;
+  --error-container:     #ffdad6;
+  --on-error-container:  #7b1d1d;
+
+  /* ── Superficies (todas con tinte azul) ── */
+  --surface:             #f8f9ff;
+  --surface-low:         #eff4ff;
+  --surface-container:   #e5eeff;
+  --surface-high:        #dce9ff;
+  --surface-highest:     #d3e4fe;
+  --surface-white:       #ffffff;
+
+  /* ── Texto ── */
+  --on-surface:          #0b1c30;
+  --on-surface-variant:  #434655;
+
+  /* ── Bordes ── */
+  --outline:             #737686;
+  --outline-variant:     #c3c6d7;
+
+  /* ── Estructura ── */
+  --sidebar-width:       256px;
+  --topbar-height:       64px;
+  --mobile-nav-height:   64px;
+
+  /* ── Radios ── */
+  --radius-sm:   0.375rem;
+  --radius-md:   0.625rem;
+  --radius-lg:   0.875rem;
+  --radius-xl:   1rem;
+  --radius-full: 9999px;
+
+  /* ── Sombras ── */
+  --shadow-sm: 0 2px 8px  rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 20px rgba(0,0,0,0.07);
+  --shadow-lg: 0 10px 32px rgba(0,0,0,0.10);
+  --shadow-xl: 0 20px 48px rgba(0,0,0,0.16);
+
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  display: block;
+  min-height: 100vh;
+  background: var(--surface);
+  color: var(--on-surface);
+}
+
+/* ============================================================
+   MATERIAL SYMBOLS
+   ============================================================ */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================
+   RESET MÍNIMO
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+a       { text-decoration: none; color: inherit; }
+button  { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
+.sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--surface-low);
+  border-right: 1px solid var(--outline-variant);
+  display: flex;
+  flex-direction: column;
+  z-index: 60;
+  /* oculto por defecto en móvil */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
+
+/* Visible en desktop */
+@media (min-width: 768px) {
+  .sidebar { transform: translateX(0); }
+}
+
+/* Clase que abre el drawer en móvil */
+.sidebar--open { transform: translateX(0); }
+
+/* Overlay oscuro detrás del sidebar en móvil */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 59;
+}
+
+/* Logo */
+.sidebar__logo {
+  padding: 2rem;
+}
+
+.sidebar__logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: -0.02em;
+}
+
+/* Nav principal */
+.sidebar__nav {
+  flex: 1;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  overflow-y: auto;
+}
+
+/* Footer del sidebar (Ayuda + Cerrar sesión) */
+.sidebar__footer {
+  padding: 1rem;
+  border-top: 1px solid var(--outline-variant);
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+/* ── Nav items ── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--on-surface-variant);
+  transition: background 0.15s, color 0.15s;
+  cursor: pointer;
+}
+
+.nav-item:hover {
+  background: var(--surface-high);
+  color: var(--on-surface);
+}
+
+/* routerLinkActive aplica esta clase automáticamente */
+.nav-item--active {
+  background: var(--primary-container);
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-item--active:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.nav-item--danger { color: var(--error); }
+
+.nav-item--danger:hover {
+  background: var(--error-container);
+  color: var(--error);
+}
+
+.nav-item__icon { font-size: 20px; }
+
+/* ============================================================
+   MAIN WRAPPER
+   ============================================================ */
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+@media (min-width: 768px) {
+  .main-wrapper { margin-left: var(--sidebar-width); }
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  height: var(--topbar-height);
+  padding: 0 1.25rem;
+  background: rgba(248,249,255,0.85);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--outline-variant);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .topbar { padding: 0 2rem; }
+}
+
+/* Botón hamburguesa (sólo en móvil) */
+.topbar__menu-btn {
+  padding: 0.375rem;
+  color: var(--on-surface);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.topbar__menu-btn:hover { background: var(--surface-high); }
+
+@media (min-width: 768px) {
+  .topbar__menu-btn { display: none; }
+}
+
+/* Zona derecha: notificaciones + usuario */
+.topbar__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+/* Botón notificaciones */
+.topbar__notif-btn {
+  position: relative;
+  padding: 0.375rem;
+  color: var(--on-surface-variant);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  transition: background 0.15s;
+}
+
+.topbar__notif-btn:hover { background: var(--surface-high); }
+
+.notif-dot {
+  position: absolute;
+  top: 6px; right: 6px;
+  width: 8px; height: 8px;
+  background: var(--error);
+  border-radius: 50%;
+  border: 2px solid var(--surface);
+}
+
+/* Info usuario */
+.topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-left: 1rem;
+  border-left: 1px solid var(--outline-variant);
+}
+
+.topbar__user-info {
+  text-align: right;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .topbar__user-info { display: block; }
+}
+
+.topbar__user-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--on-surface);
+  margin: 0;
+}
+
+.topbar__user-id {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  margin: 0;
+}
+
+.topbar__avatar {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--primary-container);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  border: 2px solid rgba(0,74,198,0.15);
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   LAYOUT MAIN — slot donde se proyecta el contenido
+   ============================================================ */
+.layout-main {
+  flex: 1;
+  /* El padding/background lo define cada vista (page-content),
+     aquí no ponemos padding para no interferir */
+}
+
+/* Espacio inferior en móvil para que el contenido
+   no quede tapado por la mobile-nav */
+@media (max-width: 767px) {
+  .layout-main {
+    padding-bottom: var(--mobile-nav-height);
+  }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.footer {
+  border-top: 1px solid var(--outline-variant);
+  padding: 1.5rem 0;
+  margin-top: auto;
+}
+
+.footer__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .footer__inner {
+    flex-direction: row;
+    padding: 0 2rem;
+  }
+}
+
+.footer__brand {
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.footer__copy {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+}
+
+.footer__links {
+  display: flex;
+  gap: 1.25rem;
+  margin-left: auto;
+}
+
+.footer__links a {
+  font-size: 0.75rem;
+  color: var(--on-surface-variant);
+  transition: color 0.15s;
+}
+
+.footer__links a:hover { color: var(--primary); }
+
+/* ============================================================
+   MOBILE BOTTOM NAV
+   ============================================================ */
+.mobile-nav {
+  display: flex;
+  position: fixed;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: var(--mobile-nav-height);
+  background: var(--surface-white);
+  border-top: 1px solid var(--outline-variant);
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 1rem;
+  z-index: 50;
+}
+
+/* Ocultar en desktop */
+@media (min-width: 768px) {
+  .mobile-nav { display: none; }
+}
+
+.mobile-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: var(--on-surface-variant);
+  font-size: 0.625rem;
+  font-weight: 400;
+  font-family: inherit;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--radius-sm);
+  transition: color 0.15s;
+  text-decoration: none;
+}
+
+.mobile-nav__item .material-symbols-outlined { font-size: 22px; }
+
+/* routerLinkActive aplica esta clase automáticamente */
+.mobile-nav__item--active {
+  color: var(--primary);
+  font-weight: 600;
+}

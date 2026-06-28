@@ -1,0 +1,139 @@
+<!-- ============================================================
+     SHARED LAYOUT — sidebar + topbar + footer + mobile-nav
+     Uso: envuelve el contenido de cada vista con este componente
+     y pasa el título/subtítulo de la página como @Input()
+
+     En app.component.html o en cada ruta:
+       <app-shared-layout [pageTitle]="'Agendar Cita'" [pageSubtitle]="'...'">
+         <router-outlet></router-outlet>
+       </app-shared-layout>
+     ============================================================ -->
+
+<!-- Overlay móvil (toca para cerrar sidebar) -->
+<div
+  *ngIf="sidebarOpen"
+  class="sidebar-overlay"
+  (click)="closeSidebar()">
+</div>
+
+<!-- ── SIDEBAR ── -->
+<aside class="sidebar" [class.sidebar--open]="sidebarOpen">
+
+  <div class="sidebar__logo">
+    <h1>SAT-MED</h1>
+  </div>
+
+  <nav class="sidebar__nav">
+    <a class="nav-item"
+       routerLink="/home"
+       routerLinkActive="nav-item--active">
+      <span class="material-symbols-outlined nav-item__icon">home</span>
+      <span>Inicio</span>
+    </a>
+    <a class="nav-item"
+       routerLink="/agendar-cita"
+       routerLinkActive="nav-item--active">
+      <span class="material-symbols-outlined nav-item__icon">calendar_today</span>
+      <span>Mis Citas</span>
+    </a>
+    <a class="nav-item"
+       routerLink="/historial"
+       routerLinkActive="nav-item--active">
+      <span class="material-symbols-outlined nav-item__icon">history_edu</span>
+      <span>Historial Clínico</span>
+    </a>
+    <a class="nav-item"
+       routerLink="/mensajes"
+       routerLinkActive="nav-item--active">
+      <span class="material-symbols-outlined nav-item__icon">mail</span>
+      <span>Mensajería</span>
+    </a>
+  </nav>
+
+  <div class="sidebar__footer">
+    <a class="nav-item" href="#">
+      <span class="material-symbols-outlined nav-item__icon">help</span>
+      <span>Ayuda</span>
+    </a>
+    <a class="nav-item nav-item--danger" href="#">
+      <span class="material-symbols-outlined nav-item__icon">logout</span>
+      <span>Cerrar Sesión</span>
+    </a>
+  </div>
+
+</aside>
+
+<!-- ── MAIN WRAPPER ── -->
+<div class="main-wrapper">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <button class="topbar__menu-btn" (click)="toggleSidebar()">
+      <span class="material-symbols-outlined">menu</span>
+    </button>
+
+    <div class="topbar__right">
+      <button class="topbar__notif-btn">
+        <span class="material-symbols-outlined">notifications</span>
+        <span class="notif-dot"></span>
+      </button>
+
+      <div class="topbar__user">
+        <div class="topbar__user-info">
+          <p class="topbar__user-name">{{ nombrePaciente }}</p>
+          <p class="topbar__user-id">Paciente {{ numeroPaciente }}</p>
+        </div>
+        <div class="topbar__avatar">
+          {{ nombrePaciente.charAt(0) }}
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENIDO DE LA PÁGINA (ng-content proyecta cada vista) -->
+  <main class="layout-main">
+    <ng-content></ng-content>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer__inner">
+      <span class="footer__brand">SAT-MED</span>
+      <span class="footer__copy">© 2025 Todos los derechos reservados.</span>
+      <nav class="footer__links">
+        <a href="#">Privacidad</a>
+        <a href="#">Términos</a>
+        <a href="#">Contacto</a>
+      </nav>
+    </div>
+  </footer>
+
+</div>
+
+<!-- ── MOBILE BOTTOM NAV ── -->
+<nav class="mobile-nav">
+  <a class="mobile-nav__item"
+     routerLink="/home"
+     routerLinkActive="mobile-nav__item--active">
+    <span class="material-symbols-outlined">home</span>
+    <span>Inicio</span>
+  </a>
+  <a class="mobile-nav__item"
+     routerLink="/agendar-cita"
+     routerLinkActive="mobile-nav__item--active">
+    <span class="material-symbols-outlined">calendar_today</span>
+    <span>Citas</span>
+  </a>
+  <a class="mobile-nav__item"
+     routerLink="/historial"
+     routerLinkActive="mobile-nav__item--active">
+    <span class="material-symbols-outlined">history_edu</span>
+    <span>Historial</span>
+  </a>
+  <a class="mobile-nav__item"
+     routerLink="/mensajes"
+     routerLinkActive="mobile-nav__item--active">
+    <span class="material-symbols-outlined">mail</span>
+    <span>Mensajería</span>
+  </a>
+</nav>

@@ -9,6 +9,8 @@ import {
 import { finalize } from 'rxjs';
 import { Profesional } from '../../models/Profesional';
 import { ProfesionalService } from '../../services/profesional.service';
+import { Usuario } from '../../models/Usuario';
+import { Especialidad } from '../../models/Especialidad';
 
 @Component({
   selector: 'app-profesional',
@@ -76,14 +78,20 @@ export class ProfesionalComponent implements OnInit {
   }
 
   private obtenerValorFormulario(): Profesional {
-    const raw = this.formularioProfesional.getRawValue();
+  const raw = this.formularioProfesional.getRawValue();
+
     return {
       idProfesional: Number(raw.idProfesional ?? 0),
       numeroRegistroProfesional: String(raw.numeroRegistroProfesional).trim(),
-      idUsuario: Number(raw.idUsuario),
-      idEspecialidad: Number(raw.idEspecialidad)
+      usuario: {
+        idUsuario: Number(raw.idUsuario)
+      } as Usuario,
+      especialidad: {
+        idEspecialidad: Number(raw.idEspecialidad)
+      } as Especialidad
     };
   }
+
 
   enviarFormulario(): void {
     this.mensajeError.set(null);
