@@ -1,11 +1,3 @@
-/* ============================================================
-   home.component.css
-   SÓLO estilos propios del dashboard/home.
-   Sidebar, topbar, footer, mobile-nav y tokens viven
-   en shared-layout.component.css
-   ============================================================ */
-
-/* ── Canvas del dashboard ── */
 .dashboard {
   flex: 1;
   padding: 1.25rem;
@@ -22,7 +14,7 @@
   .dashboard { padding-bottom: 80px; }
 }
 
-/* ── Loading ── */
+/* Loading */
 .dashboard__loading {
   display: flex;
   flex-direction: column;
@@ -43,7 +35,7 @@
 
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Error ── */
+/* Error */
 .dashboard__error {
   display: flex;
   flex-direction: column;
@@ -57,7 +49,7 @@
 
 .dashboard__error .material-symbols-outlined { font-size: 48px; }
 
-/* ── Bienvenida ── */
+/* Bienvenida */
 .dashboard__welcome { margin-bottom: 2rem; }
 
 .welcome__title {
@@ -74,7 +66,7 @@
   margin: 0;
 }
 
-/* ── Grid principal ── */
+/* Grid principal */
 .dashboard__grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -92,7 +84,7 @@
   gap: 1.5rem;
 }
 
-/* ── Cards ── */
+/* Cards */
 .card {
   background: var(--surface-white);
   border-radius: var(--radius-xl);
@@ -156,7 +148,7 @@
   margin: 0 0 1rem;
 }
 
-/* ── Date badge ── */
+/* Date badge */
 .date-badge {
   background: rgba(37,99,235,0.08);
   padding: 1rem;
@@ -183,7 +175,7 @@
 
 .date-badge__time { font-size: 0.75rem; color: var(--on-surface-variant); }
 
-/* ── Badge ── */
+/* Badge */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -207,7 +199,7 @@
 
 .badge__icon { font-size: 14px; }
 
-/* ── Detalles cita ── */
+/* Detalles cita */
 .cita__details {
   display: grid;
   gap: 1.25rem;
@@ -271,7 +263,7 @@
 
 .cita__id .material-symbols-outlined { font-size: 14px; }
 
-/* ── Treatment card ── */
+/* Treatment card */
 .card--treatment {
   position: relative;
   overflow: hidden;
@@ -343,7 +335,7 @@
 .status-chip { font-size: 0.75rem; font-weight: 700; }
 .status-chip--active { color: var(--secondary); }
 
-/* ── Summary card ── */
+/* Summary card */
 .card--summary { display: flex; flex-direction: column; }
 
 .summary__icon-wrap {
@@ -380,7 +372,7 @@
 
 .summary__unit { font-size: 1rem; color: var(--on-surface-variant); }
 
-/* ── Last attention card ── */
+/* Last attention card */
 .last-attention__header {
   display: flex;
   align-items: flex-start;
@@ -415,7 +407,7 @@
   overflow: hidden;
 }
 
-/* ── Tip card ── */
+/* Tip card */
 .card--tip {
   background: linear-gradient(135deg, var(--primary), var(--tertiary));
   color: #fff;
@@ -426,7 +418,7 @@
 .tip__title { font-size: 1.125rem; font-weight: 600; margin: 0 0 0.5rem; }
 .tip__body  { font-size: 0.875rem; opacity: 0.9; line-height: 1.6; margin: 0; }
 
-/* ── Buttons ── */
+/* Buttons */
 .btn {
   display: inline-flex;
   align-items: center;

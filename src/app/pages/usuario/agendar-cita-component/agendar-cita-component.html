@@ -1,5 +1,3 @@
-<!-- agendar-cita.component.html -->
-
 <app-shared-layout>
 
   <div class="page-content">
@@ -11,7 +9,7 @@
         <p class="page-subtitle">Gestiona tus próximas citas y revisa tu historial médico.</p>
       </header>
 
-      <!-- ── PESTAÑAS ── -->
+      <!-- PESTAÑAS -->
       <div class="tabs">
         <button
           class="tab-btn"
@@ -34,9 +32,7 @@
         </button>
       </div>
 
-      <!-- ══════════════════════════════════════════
-           PESTAÑA: PRÓXIMAS CITAS
-      ══════════════════════════════════════════ -->
+      <!-- PESTAÑA: PRÓXIMAS CITAS -->
       <div *ngIf="tabActiva === 'proximas'" class="tab-panel">
 
         <div *ngIf="cargandoCitas" class="state-message state-message--center">
@@ -109,9 +105,7 @@
         </div>
       </div>
 
-      <!-- ══════════════════════════════════════════
-           PESTAÑA: HISTORIAL DE CITAS
-      ══════════════════════════════════════════ -->
+      <!-- PESTAÑA: HISTORIAL DE CITAS -->
       <div *ngIf="tabActiva === 'historial'" class="tab-panel">
 
         <div *ngIf="cargandoHistorial" class="state-message state-message--center">
@@ -173,9 +167,7 @@
         </div>
       </div>
 
-      <!-- ══════════════════════════════════════════
-           PESTAÑA: AGENDAR NUEVA CITA (flujo original)
-      ══════════════════════════════════════════ -->
+      <!-- PESTAÑA: AGENDAR NUEVA CITA -->
       <div *ngIf="tabActiva === 'agendar'" class="tab-panel">
 
         <div class="layout-grid">
@@ -340,9 +332,7 @@
 </app-shared-layout>
 
 
-<!-- ══════════════════════════════════════════
-     MODAL: CONFIRMAR RESERVA (flujo original)
-══════════════════════════════════════════ -->
+<!-- MODAL: CONFIRMAR RESERVA -->
 <div *ngIf="mostrarModal" class="modal-overlay">
   <div class="modal-backdrop" (click)="cerrarModal()"></div>
   <div class="modal">
@@ -409,9 +399,7 @@
 </div>
 
 
-<!-- ══════════════════════════════════════════
-     MODAL: CANCELAR CITA
-══════════════════════════════════════════ -->
+<!-- MODAL: CANCELAR CITA -->
 <div *ngIf="mostrarModalCancelar" class="modal-overlay">
   <div class="modal-backdrop" (click)="cerrarModalCancelar()"></div>
   <div class="modal modal--sm">
@@ -446,9 +434,7 @@
 </div>
 
 
-<!-- ══════════════════════════════════════════
-     MODAL: REPROGRAMAR CITA
-══════════════════════════════════════════ -->
+<!-- MODAL: REPROGRAMAR CITA -->
 <div *ngIf="mostrarModalReprogramar" class="modal-overlay">
   <div class="modal-backdrop" (click)="cerrarModalReprogramar()"></div>
   <div class="modal">
@@ -461,7 +447,7 @@
         </button>
       </div>
 
-      <!-- Info de la cita actual -->
+      <!-- Informacion de la cita actual -->
       <div class="resumen" style="margin-bottom: 1.5rem;">
         <div class="resumen__row">
           <span class="material-symbols-outlined resumen__icon">event</span>

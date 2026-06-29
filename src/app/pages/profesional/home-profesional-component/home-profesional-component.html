@@ -1,0 +1,50 @@
+<app-shared-layout>
+  <main class="dashboard">
+
+    <header class="dashboard__header">
+      <h2 class="header__title">Buen día, Dr. {{ nombreProfesional }}</h2>
+      <p class="welcome__subtitle">Aquí está el estado de sus consultas y bloques horarios para hoy.</p>
+    </header>
+
+    <div class="dashboard__grid">
+
+      /* Barra lateral: Bloques Horarios */
+      <aside class="dashboard__sidebar">
+        <div class="card">
+          <h3 class="card__title">Mis Bloques Hoy</h3>
+          <div class="schedule-list">
+            <div *ngFor="let bloque of bloquesHorarios" class="schedule-item">
+              <span class="material-symbols-outlined" style="font-size: 16px; vertical-align: middle;">schedule</span>
+              {{ bloque.horaInicio }} - {{ bloque.horaFin }}
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      /* Contenido principal: Lista de Pacientes Agendados */
+      <section class="dashboard__main">
+        <div class="card">
+          <h3 class="card__title">Pacientes Citados</h3>
+          
+          <div class="patient-list">
+            <div *ngFor="let cita of citasDelDia" class="patient-item">
+              <div class="patient-info">
+                <h4>{{ cita.pacienteNombre }}</h4>
+                <p><strong>Hora:</strong> {{ formatHora(cita.fechaHora) }} | <strong>Motivo:</strong> {{ cita.motivoCita }}</p>
+              </div>
+              <div>
+                <button class="btn btn--primary" (click)="atenderPaciente(cita)">
+                  <span class="material-symbols-outlined">clinical_notes</span>
+                  Llamar Paciente
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+</app-shared-layout>

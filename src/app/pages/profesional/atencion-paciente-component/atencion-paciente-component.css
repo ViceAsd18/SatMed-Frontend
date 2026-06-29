@@ -1,0 +1,76 @@
+/* Contenedor de página */
+.atencion-container {
+  padding: 1.5rem 0 3rem;
+}
+
+.contenedor {
+  width: min(1100px, calc(100% - 2rem));
+  margin: 0 auto;
+}
+
+/* Layout en dos columnas */
+.atencion-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .atencion-grid { grid-template-columns: 1fr 380px; }
+}
+
+/* Tarjetas de formulario */
+.card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  border: 1px solid rgba(195,198,215,0.25);
+  margin-bottom: 1.5rem;
+}
+
+.card__title {
+  font-size: 1.25rem;
+  color: #081c2f;
+  margin: 0 0 1rem;
+}
+
+/* Campos de formulario */
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #12324a;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #c3c6d7;
+  font-family: inherit;
+}
+
+/* Botonera */
+.actions-bar {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
+.btn--primary { background: #004ac6; color: #fff; }
+.btn--ghost { background: #f1f5f9; color: #475569; }

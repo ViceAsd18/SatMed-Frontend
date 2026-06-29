@@ -20,7 +20,7 @@ interface DiaCalendario {
   seleccionado: boolean;
 }
 
-// IDs de estado según tu BD — ajusta si difieren
+// IDs de estado según BD
 const ESTADO = {
   PENDIENTE:  1,
   CONFIRMADA: 2,
@@ -43,24 +43,24 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
   private cdr      = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
 
-  // ── Pestañas ───────────────────────────────────────────────────
+  // Pestañas
   tabActiva: 'proximas' | 'historial' | 'agendar' = 'proximas';
 
-  // ── Citas del paciente ─────────────────────────────────────────
+  // Citas del paciente
   citasProximas:  Cita[] = [];
   citasHistorial: Cita[] = [];
   cargandoCitas    = false;
   cargandoHistorial = false;
 
-  // ── Cita seleccionada para cancelar / reprogramar ──────────────
+  // Cita seleccionada para cancelar/reprogramar
   citaSeleccionada: Cita | null = null;
 
-  // ── Modal cancelar ─────────────────────────────────────────────
+  // Modal cancelar
   mostrarModalCancelar  = false;
   errorCancelar         = false;
   mensajeErrorCancelar  = '';
 
-  // ── Modal reprogramar ──────────────────────────────────────────
+  // Modal reprogramar
   mostrarModalReprogramar       = false;
   fechaReprogramar              = '';
   horaReprogramar               = '';
@@ -69,7 +69,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
   errorReprogramar              = false;
   mensajeErrorReprogramar       = '';
 
-  // ── Datos agendar (flujo original) ────────────────────────────
+  // Datos agendar
   especialidades: Especialidad[]       = [];
   profesionales:  Profesional[]        = [];
   horarios:       string[]             = [];
@@ -80,29 +80,28 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
   cargandoProfesionales = false;
   cargandoHorarios      = false;
 
-  // ── Modal confirmar reserva ────────────────────────────────────
+  // Modal confirmar reserva
   mostrarModal  = false;
   exitoReserva  = false;
   errorReserva  = false;
   mensajeError  = '';
 
-  // ── Calendario semanal ─────────────────────────────────────────
+  // Calendario semanal
   diasSemana: DiaCalendario[] = [];
   fechaSeleccionada           = '';
   mesAnioLabel                = '';
 
-  // ── Payload nueva cita ─────────────────────────────────────────
+  // Payload nueva cita
   nuevaCita: Cita = {
     fechaHora:                '',
     motivoCita:               '',
     estadoCitaIdEstadoCita:   ESTADO.PENDIENTE,
     profesionalIdProfesional: 0,
-    pacienteIdPaciente:       12044   // ← reemplazar con AuthService
+    pacienteIdPaciente:       12044
   };
 
   horaSeleccionada = '';
 
-  // ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.generarSemanaActual();
     this.cargarEspecialidades();
@@ -115,13 +114,13 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  // ── Navegación de pestañas ────────────────────────────────────
+  // Navegación de pestañas
   cambiarTab(tab: 'proximas' | 'historial' | 'agendar'): void {
     this.tabActiva = tab;
     this.cdr.markForCheck();
   }
 
-  // ── Carga de citas próximas ───────────────────────────────────
+  // Carga de citas próximas
   cargarCitasProximas(): void {
     this.cargandoCitas = true;
     this.cdr.markForCheck();
@@ -148,7 +147,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
       });
   }
 
-  // ── Carga de historial ────────────────────────────────────────
+  // Carga de historial
   cargarHistorial(): void {
     this.cargandoHistorial = true;
     this.cdr.markForCheck();
@@ -159,7 +158,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
         next: (citas: Cita[]) => {
           const hoy = new Date();
           hoy.setHours(0, 0, 0, 0);
-          // Historial = fecha pasada O estados terminales (cancelada, realizada, no asistió)
+          // Historial = fecha pasada o (cancelada, realizada, no asistió)
           this.citasHistorial = citas.filter(c => {
             const fecha = new Date(c.fechaHora);
             return fecha < hoy
@@ -178,7 +177,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
       });
   }
 
-  // ── Modal cancelar ────────────────────────────────────────────
+  // Modal cancelar
   abrirModalCancelar(cita: Cita): void {
     this.citaSeleccionada    = cita;
     this.errorCancelar       = false;
@@ -212,7 +211,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
       });
   }
 
-  // ── Modal reprogramar ─────────────────────────────────────────
+  // Modal reprogramar
   abrirModalReprogramar(cita: Cita): void {
     this.citaSeleccionada         = cita;
     this.fechaReprogramar         = '';
@@ -286,7 +285,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
       });
   }
 
-  // ── Acciones del historial ────────────────────────────────────
+  // Acciones del historial
   verInforme(cita: Cita): void {
     // Implementar según tu lógica: navegar a detalle, descargar PDF, etc.
     console.log('Ver informe de cita:', cita.idCita);
@@ -297,9 +296,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
     this.cambiarTab('historial');
   }
 
-  // ── Helpers de formato ─────────────────────────────────────────
   // El backend devuelve fechaHora con espacio: "2026-07-01 09:00:00"
-  // new Date() no parsea eso bien en todos los navegadores, así que normalizamos
   private normalizarFecha(fechaHora: string): Date {
     return new Date(fechaHora.replace(' ', 'T'));
   }
@@ -319,7 +316,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
       .toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' });
   }
 
-  // ── Helpers de estado ─────────────────────────────────────────
+  // Helpers de estado
   getEstadoLabel(idEstado: number): string {
     const labels: Record<number, string> = {
       [ESTADO.PENDIENTE]:  'Pendiente',
@@ -348,8 +345,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
       : 'cita-card__header--pendiente';
   }
 
-  // ── Helpers de profesional ────────────────────────────────────
-  // El servicio adjunta el profesional como { ...cita, profesional: Profesional }
+  // El servicio adjunta el profesional como { cita, profesional: Profesional }
   getInicialProfesional(cita: Cita): string {
     const prof = (cita as any).profesional;
     if (prof?.usuario?.pnombreUsuario) {
@@ -377,10 +373,7 @@ export class AgendarCitaComponent implements OnInit, OnDestroy {
     return (cita as any).motivo ?? cita.motivoCita ?? '—';
   }
 
-  // ══════════════════════════════════════════
-  // LÓGICA ORIGINAL (sin cambios) — agendar
-  // ══════════════════════════════════════════
-
+  // LÓGICA — agendar
   generarSemanaActual(): void {
     const hoy    = new Date();
     const labels = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];

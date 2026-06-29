@@ -1,0 +1,67 @@
+<app-shared-layout>
+  <main class="atencion-container">
+    <div class="contenedor">
+
+      <header class="card" style="border-left: 4px solid #004ac6;">
+        <h2 style="margin: 0 0 0.25rem;">Consulta Activa: {{ pacienteNombre }}</h2>
+        <p style="margin: 0; color: #64748b;">Evolución clínica, diagnósticos y recetas médicas.</p>
+      </header>
+
+      <div class="atencion-grid">
+
+        <section class="main-form">
+          <div class="card">
+            <h3 class="card__title">Anamnesis y Diagnóstico</h3>
+            
+            <div class="form-group">
+              <label>Evolución / Notas Clínicas</label>
+              <textarea class="form-control" rows="5" [(ngModel)]="nuevaAtencion.indicaciones" placeholder="Escriba los síntomas y observaciones..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Diagnóstico Principal</label>
+              <input type="text" class="form-control" [(ngModel)]="nuevaAtencion.diagnostico" placeholder="Ej. Hipertensión arterial esencial">
+            </div>
+          </div>
+
+          <div class="card">
+            <h3 class="card__title">Prescripción de Tratamiento</h3>
+            <div class="form-group">
+              <label>Medicamento e Indicaciones de uso</label>
+              <textarea class="form-control" rows="3" [(ngModel)]="nuevoTratamiento.descripcionTratamiento" placeholder="Ej. Paracetamol 500mg cada 8 horas por 3 días."></textarea>
+            </div>
+          </div>
+        </section>
+
+        <aside class="sidebar-form">
+          <div class="card">
+            <h3 class="card__title">Enfermedades Crónicas</h3>
+            <p style="font-size: 0.9rem; color: #475569;">Paciente registra antecedentes de:</p>
+            <span style="background: #fee2e2; color: #991b1b; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.85rem; font-weight: 600;">
+              Asma Bronquial
+            </span>
+          </div>
+
+          <div class="card">
+            <h3 class="card__title">Derivación / Interconsulta</h3>
+            <div class="form-group">
+              <label>Solicitar Interconsulta a Especialidad</label>
+              <select class="form-control" [(ngModel)]="nuevaInterconsulta.especialidadIdEspecialidad">
+                <option [ngValue]="null">No requiere derivación</option>
+                <option [ngValue]="1">Cardiología</option>
+                <option [ngValue]="2">Neurología</option>
+              </select>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+
+      <footer class="actions-bar">
+        <button class="btn btn--ghost" (click)="cancelarAtencion()">Cancelar</button>
+        <button class="btn btn--primary" (click)="guardarFichaClinica()">Finalizar y Guardar Atención</button>
+      </footer>
+
+    </div>
+  </main>
+</app-shared-layout>

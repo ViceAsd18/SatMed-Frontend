@@ -26,7 +26,8 @@ export class HomeUsuarioComponent implements OnInit, OnDestroy {
   loading = true;
   error: string | null = null;
 
-  readonly pacienteId     = 500; // ajusta al ID real del paciente logueado
+  // ajusta al ID real del paciente logueado
+  readonly pacienteId     = 500;
   readonly nombrePaciente = 'Vicente Ramírez';
   readonly numeroPaciente = '#12044';
 
