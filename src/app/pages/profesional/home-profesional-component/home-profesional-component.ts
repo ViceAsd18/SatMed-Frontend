@@ -9,8 +9,8 @@ import { Cita } from '../../../models/cita';
   selector: 'app-home-profesional',
   standalone: true,
   imports: [CommonModule, SharedLayoutComponent],
-  templateUrl: './home-profesional.component.html',
-  styleUrls: ['./home-profesional.component.css'],
+  templateUrl: './home-profesional-component.html',
+  styleUrls: ['./home-profesional-component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeProfesionalComponent implements OnInit {
@@ -23,9 +23,8 @@ export class HomeProfesionalComponent implements OnInit {
   readonly nombreProfesional = 'Vicente Ramírez';
 
   /* Colecciones de datos */
+  //No coinciden los nombres de las propiedades con la interfaz HorarioProfesional, por lo que se debe ajustar el tipo de datos o la estructura de los objetos.
   bloquesHorarios: HorarioProfesional[] = [
-    { idHorarioProfesional: 1, horaInicio: '08:00', horaFin: '12:00', activo: true, profesionalIdProfesional: 10, diaSemanaIdDiaSemana: 1 },
-    { idHorarioProfesional: 2, horaInicio: '14:00', horaFin: '18:00', activo: true, profesionalIdProfesional: 10, diaSemanaIdDiaSemana: 1 }
   ];
 
   citasDelDia: any[] = [

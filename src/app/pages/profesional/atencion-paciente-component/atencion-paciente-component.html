@@ -46,7 +46,8 @@
             <h3 class="card__title">Derivación / Interconsulta</h3>
             <div class="form-group">
               <label>Solicitar Interconsulta a Especialidad</label>
-              <select class="form-control" [(ngModel)]="nuevaInterconsulta.especialidadIdEspecialidad">
+              //No coincide con el model, se debe ajustar el nombre de la propiedad o la estructura del objeto.
+              <select class="form-control" [(ngModel)]="nuevaInterconsulta.atencionMedica">
                 <option [ngValue]="null">No requiere derivación</option>
                 <option [ngValue]="1">Cardiología</option>
                 <option [ngValue]="2">Neurología</option>

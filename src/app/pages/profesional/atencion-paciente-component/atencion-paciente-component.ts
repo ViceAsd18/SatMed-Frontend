@@ -17,8 +17,8 @@ import { Router } from '@angular/router';
   selector: 'app-atencion-paciente',
   standalone: true,
   imports: [CommonModule, FormsModule, SharedLayoutComponent],
-  templateUrl: './atencion-paciente.component.html',
-  styleUrls: ['./atencion-paciente.component.css'],
+  templateUrl: './atencion-paciente-component.html',
+  styleUrls: ['./atencion-paciente-component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AtencionPacienteComponent implements OnInit {
@@ -29,29 +29,35 @@ export class AtencionPacienteComponent implements OnInit {
   /* Datos del paciente actual */
   pacienteNombre = 'Juan Pérez';
 
-/* Objetos basados en sus modelos de backend */
+  /* Objetos basados en sus modelos de backend */
+  //Le faltaba propiedades para complir con el model
   nuevaAtencion: AtencionMedica = {
-    idAtencionMedica: 0,
+    idAtencion: 0,
     fechaAtencion: new Date().toISOString(),
     diagnostico: '',
     indicaciones: '',
-    citaIdCita: 101
+    motivo : '',
+    idProfesional: 10,
+    idPaciente: 1
   };
 
+  //No coincide con el model
   nuevoTratamiento: Tratamiento = {
     idTratamiento: 0,
     descripcionTratamiento: '',
     fechaInicio: new Date().toISOString(),
     fechaFin: new Date().toISOString(),
-    atencionMedicaIdAtencionMedica: 0
+    idAtencionMedica: 0,
+    idEstadoTratamiento: 1
   };
 
+  //No coincide con el model
   nuevaInterconsulta: Interconsulta = {
     idInterconsulta: 0,
-    descripcionInterconsulta: '',
-    fechaInterconsulta: new Date().toISOString(),
-    atencionMedicaIdAtencionMedica: 0,
-    especialidadIdEspecialidad: 0 // Cambiado null por 0 para respetar la firma estricta
+    motivo: '',
+    fechaEmision: new Date().toISOString(),
+    idProfesional: 10,
+    atencionMedica: this.nuevaAtencion
   };
 
   ngOnInit(): void {
